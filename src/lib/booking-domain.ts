@@ -68,10 +68,18 @@ export function toEasternIso(day: string, time: string) {
   return `${day}T${String(hour).padStart(2, "0")}:${minutes}:00-04:00`;
 }
 
-export function isPublishedBookingSlot(startAt: string) {
+export function isPublishedBookingSlot(startAt: string, now = new Date()) {
+  const startTime = new Date(startAt).getTime();
+
+  if (!Number.isFinite(startTime) || startTime <= now.getTime()) return false;
+
   return bookingDays.some((day) =>
     (bookingTimesByDay[day.id] ?? []).some(
       (time) => toEasternIso(day.id, time) === startAt,
     ),
   );
+}
+
+export function isBookingConflictCode(code: string) {
+  return code === "23505" || code === "23P01";
 }

@@ -1,11 +1,12 @@
 create extension if not exists pgcrypto;
+create extension if not exists btree_gist;
 
 create table if not exists public.booking_requests (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   consultant_slug text not null check (char_length(consultant_slug) between 2 and 80),
   service_id text not null check (service_id in ('decision-session', 'strategy-intensive', 'advisory-fit')),
-  start_at timestamptz not null,
+  start_at timestamptz not null check (start_at > created_at),
   timezone text not null check (char_length(timezone) between 1 and 64),
   duration_minutes integer not null check (duration_minutes between 15 and 480),
   price_cents integer not null check (price_cents >= 0),
@@ -25,6 +26,24 @@ create unique index if not exists booking_requests_active_slot_unique
 
 create index if not exists booking_requests_consultant_created_idx
   on public.booking_requests (consultant_slug, created_at desc);
+
+do $$
+begin
+  alter table public.booking_requests
+    add constraint booking_requests_no_active_overlap
+    exclude using gist (
+      consultant_slug with =,
+      tstzrange(
+        start_at,
+        start_at + (duration_minutes * interval '1 minute'),
+        '[)'
+      ) with &&
+    )
+    where (status in ('requested', 'pending_payment', 'confirmed'));
+exception
+  when duplicate_object then null;
+end
+$$;
 
 alter table public.booking_requests enable row level security;
 

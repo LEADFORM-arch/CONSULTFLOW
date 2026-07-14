@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { bookingRequestSchema } from "@/lib/booking-schema";
 import {
   getBookingService,
+  isBookingConflictCode,
   isPublishedBookingSlot,
 } from "@/lib/booking-domain";
 import { getSupabaseAdmin } from "@/server/supabase-admin";
@@ -69,7 +70,7 @@ export async function POST(request: Request) {
     .single();
 
   if (error) {
-    if (error.code === "23505") {
+    if (isBookingConflictCode(error.code)) {
       return NextResponse.json(
         { error: "That time was just requested. Please choose another." },
         { status: 409 },
