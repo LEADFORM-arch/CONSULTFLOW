@@ -1,3 +1,9 @@
+-- STATUS: PREPARED, NOT APPLIED.
+-- The owner will create Supabase later. Apply this migration only after a new,
+-- isolated CONSULTFLOW project exists. Never apply it to the existing LEADFORM
+-- or Leadfromfr projects. Configure Vercel only after the migration succeeds,
+-- then validate the complete booking flow before merging the backend branch.
+
 create extension if not exists pgcrypto;
 create extension if not exists btree_gist;
 
