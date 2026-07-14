@@ -1,0 +1,40 @@
+<!-- @dsCard group="Foundations" name="Elevation & materials" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConsultFlow · Elevation</title>
+<style>
+  :root{--canvas:#f3f1ec;--canvas-warm:#f7f5f0;--paper:#fbfaf7;--ink:#152033;
+    --ink-secondary:#526071;--ink-tertiary:#7d8794;--line:rgba(21,32,51,.12);
+    --shadow-card:0 1px 2px rgba(21,32,51,.04),0 8px 20px -12px rgba(21,32,51,.14);
+    --shadow-raised:0 2px 5px rgba(21,32,51,.05),0 16px 34px -14px rgba(21,32,51,.18);
+    --shadow-ink:0 1px 0 rgba(255,255,255,.05) inset,0 22px 60px -24px rgba(11,21,34,.55)}
+  *{box-sizing:border-box}
+  body{margin:0;padding:44px;color:var(--ink);
+    font-family:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    background-color:var(--canvas);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),radial-gradient(135% 90% at 50% -12%,var(--canvas-warm),rgba(247,245,240,0) 55%);
+    -webkit-font-smoothing:antialiased;}
+  .eyebrow{font-family:"Geist Mono",ui-monospace,monospace;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--ink-tertiary);margin:0 0 8px}
+  h1{font-size:24px;font-weight:600;letter-spacing:-.03em;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--ink-secondary);margin:0 0 30px;max-width:62ch;line-height:1.5}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:22px}
+  .tile{border-radius:12px;min-height:132px;padding:18px;display:flex;flex-direction:column;justify-content:flex-end}
+  .card{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow-card)}
+  .raised{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow-raised)}
+  .ink{box-shadow:var(--shadow-ink);color:#fff;border:1px solid rgba(255,255,255,.1);
+    background:radial-gradient(120% 140% at 12% -10%,rgba(60,92,140,.16),rgba(16,27,42,0) 46%),linear-gradient(178deg,#17263a 0%,#101b2a 52%,#0d1826 100%)}
+  .lbl{font-size:12.5px;font-weight:600}
+  .desc{font-size:11px;margin-top:3px;opacity:.7}
+  .mono{font-family:"Geist Mono",ui-monospace,monospace}
+</style></head>
+<body>
+  <p class="eyebrow">ConsultFlow · Foundations</p>
+  <h1>Elevation &amp; materials</h1>
+  <p class="sub">Depth is warm and directional, never neon. Paper cards float on a soft two-part shadow; the deep-ink material adds a top inner highlight and a light fall-off so navy surfaces feel machined, not flat.</p>
+  <div class="grid">
+    <div class="tile card"><div class="lbl">Card</div><div class="desc mono">--shadow-card</div></div>
+    <div class="tile raised"><div class="lbl">Raised</div><div class="desc mono">--shadow-raised</div></div>
+    <div class="tile ink"><div class="lbl">Deep ink</div><div class="desc mono">surface-ink · --shadow-ink</div></div>
+  </div>
+</body></html>

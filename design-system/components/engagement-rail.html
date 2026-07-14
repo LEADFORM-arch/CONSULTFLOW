@@ -1,0 +1,88 @@
+<!-- @dsCard group="Components" name="Firm pulse & engagement rail" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConsultFlow · Engagement rail</title>
+<style>
+  :root{--canvas:#f3f1ec;--canvas-warm:#f7f5f0;--paper:#fbfaf7;--ink:#152033;
+    --ink-secondary:#526071;--ink-tertiary:#7d8794;--line:rgba(21,32,51,.12);
+    --cobalt:#24529a;--ledger:#1d725b;--brass:#ad642d}
+  *{box-sizing:border-box}
+  body{margin:0;padding:44px;color:var(--ink);
+    font-family:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    background-color:var(--canvas);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),radial-gradient(135% 90% at 50% -12%,var(--canvas-warm),rgba(247,245,240,0) 55%);
+    -webkit-font-smoothing:antialiased;}
+  .eyebrow{font-family:"Geist Mono",ui-monospace,monospace;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--ink-tertiary);margin:0 0 8px}
+  h1{font-size:24px;font-weight:600;letter-spacing:-.03em;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--ink-secondary);margin:0 0 28px;max-width:62ch;line-height:1.5}
+  .mono{font-family:"Geist Mono",ui-monospace,"JetBrains Mono",monospace}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(21,32,51,.04),0 8px 20px -12px rgba(21,32,51,.14);margin-bottom:22px}
+  .chd{display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;border-bottom:1px solid rgba(21,32,51,.08)}
+  .chd h2{font-size:14px;font-weight:600;margin:0}
+  .chd p{font-size:10px;color:var(--ink-tertiary);margin:4px 0 0}
+  .pulse{display:grid;grid-template-columns:repeat(4,1fr)}
+  .metric{padding:16px 20px;border-right:1px solid rgba(21,32,51,.08)}
+  .metric:last-child{border-right:0}
+  .metric .k{font-size:10px;color:var(--ink-tertiary)}
+  .metric .v{font-size:20px;font-weight:600;letter-spacing:-.04em;margin-top:8px}
+  .metric .n{font-size:9px;margin-top:6px}
+  .green{color:var(--ledger)}.blue{color:var(--cobalt)}.amber{color:var(--brass)}
+  .row{display:grid;grid-template-columns:64px 1fr 130px 20px;align-items:center;gap:12px;
+    padding:15px 20px;border-bottom:1px solid rgba(21,32,51,.07);cursor:pointer;transition:background .15s}
+  .row:last-child{border-bottom:0}
+  .row:hover{background:#f2f0eb}
+  .time .t{font-size:12px;font-weight:600;color:#26344a}
+  .time .m{font-size:8px;color:#8a939e;margin-top:2px}
+  .who{display:flex;align-items:center;gap:12px;min-width:0}
+  .av{width:36px;height:36px;border-radius:999px;flex:0 0 36px;display:grid;place-items:center;
+    background:#e7e2d8;border:1px solid rgba(23,36,58,.1);color:#293852;font-size:12px;font-weight:600}
+  .who .c{font-size:12px;font-weight:600;color:#202d42}
+  .who .s{font-size:10px;color:var(--ink-tertiary);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .val{font-size:11px;font-weight:600;color:#28364a}
+  .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid;border-radius:999px;
+    padding:4px 9px;font-size:10px;font-weight:600;margin-top:6px}
+  .b-green{border-color:rgba(29,114,91,.15);background:#e8f2ed;color:#175b49}
+  .b-blue{border-color:rgba(36,82,154,.15);background:#e8eef7;color:#1f477f}
+  .b-amber{border-color:rgba(173,100,45,.15);background:#f6ece3;color:#935326}
+  .chev{color:#a1a8b1}
+</style></head>
+<body>
+  <p class="eyebrow">ConsultFlow · Components</p>
+  <h1>Firm pulse &amp; engagement rail</h1>
+  <p class="sub">The signature operating view. One ledger of firm health, then the day&rsquo;s engagements unified with time, payment confidence, and next action — every number set in Geist Mono.</p>
+
+  <div class="card">
+    <div class="chd"><div><h2>Firm pulse</h2><p>July 1&ndash;14 · cash basis</p></div><span class="mono" style="font-size:9px;letter-spacing:.1em;color:var(--ink-tertiary);text-transform:uppercase">Live data</span></div>
+    <div class="pulse">
+      <div class="metric"><div class="k">Revenue secured</div><div class="v mono">$18,950</div><div class="n green">+$3,200 vs. last period</div></div>
+      <div class="metric"><div class="k">Billable utilization</div><div class="v mono">71%</div><div class="n blue">4 pts above target</div></div>
+      <div class="metric"><div class="k">Open receivables</div><div class="v mono">$4,600</div><div class="n amber">$1,200 due in 48h</div></div>
+      <div class="metric"><div class="k">Follow-through</div><div class="v mono">92%</div><div class="n green">11 of 12 closed</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chd"><div><h2>Today&rsquo;s engagement rail</h2><p>$4,400 protected across 3 client decisions</p></div><span style="font-size:11px;font-weight:600;color:var(--cobalt)">Open schedule</span></div>
+    <div class="row">
+      <div class="time"><div class="t mono">10:00</div><div class="m mono">AM</div></div>
+      <div class="who"><div class="av">ML</div><div><div class="c">Meridian Labs</div><div class="s">Growth strategy session · Paid · Brief complete</div></div></div>
+      <div><div class="val mono">$1,250</div><span class="badge b-green">Ready</span></div>
+      <div class="chev">&rsaquo;</div>
+    </div>
+    <div class="row">
+      <div class="time"><div class="t mono">1:30</div><div class="m mono">PM</div></div>
+      <div class="who"><div class="av">NH</div><div><div class="c">Northstar Health</div><div class="s">Executive alignment · Deposit secured · 92 fit score</div></div></div>
+      <div><div class="val mono">$2,400</div><span class="badge b-blue">Review</span></div>
+      <div class="chev">&rsaquo;</div>
+    </div>
+    <div class="row">
+      <div class="time"><div class="t mono">4:00</div><div class="m mono">PM</div></div>
+      <div class="who"><div class="av">AC</div><div><div class="c">Arbor &amp; Co.</div><div class="s">Discovery intensive · Intake due · Reminder queued</div></div></div>
+      <div><div class="val mono">$750</div><span class="badge b-amber">Attention</span></div>
+      <div class="chev">&rsaquo;</div>
+    </div>
+  </div>
+</body></html>

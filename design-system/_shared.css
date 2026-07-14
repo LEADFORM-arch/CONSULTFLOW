@@ -1,0 +1,55 @@
+/* ConsultFlow premium design-system — shared preview styling.
+   Mirrors src/app/globals.css tokens exactly. */
+:root {
+  --canvas: #f3f1ec;
+  --canvas-warm: #f7f5f0;
+  --paper: #fbfaf7;
+  --paper-raised: #ffffff;
+  --ink: #152033;
+  --ink-secondary: #526071;
+  --ink-tertiary: #7d8794;
+  --line-soft: rgba(21, 32, 51, 0.07);
+  --line: rgba(21, 32, 51, 0.12);
+  --navy: #101b2a;
+  --cobalt: #24529a;
+  --cobalt-dark: #183d78;
+  --ledger: #1d725b;
+  --brass: #a47635;
+  --warning: #ad642d;
+  --shadow-card: 0 1px 2px rgba(21,32,51,0.04), 0 8px 20px -12px rgba(21,32,51,0.14);
+  --shadow-raised: 0 2px 5px rgba(21,32,51,0.05), 0 16px 34px -14px rgba(21,32,51,0.18);
+  --shadow-ink: 0 1px 0 rgba(255,255,255,0.05) inset, 0 22px 60px -24px rgba(11,21,34,0.55);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 40px;
+  font-family: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background-color: var(--canvas);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
+    radial-gradient(135% 90% at 50% -12%, var(--canvas-warm), rgba(247,245,240,0) 55%);
+  -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: "Geist Mono", ui-monospace, "SF Mono", "JetBrains Mono", monospace; }
+.ds-eyebrow {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--ink-tertiary); margin: 0 0 6px;
+}
+.ds-title { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; margin: 0 0 4px; }
+.ds-sub { font-size: 13px; color: var(--ink-secondary); margin: 0 0 26px; max-width: 60ch; line-height: 1.5; }
+.surface-ink {
+  background:
+    radial-gradient(120% 140% at 12% -10%, rgba(60,92,140,0.16), rgba(16,27,42,0) 46%),
+    linear-gradient(178deg, #17263a 0%, #101b2a 52%, #0d1826 100%);
+  box-shadow: var(--shadow-ink);
+  color: #fff;
+}
+.surface-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  border-radius: 12px;
+}

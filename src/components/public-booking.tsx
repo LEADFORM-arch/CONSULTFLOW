@@ -82,9 +82,9 @@ export function PublicBookingExperience() {
 
   if (confirmed) {
     return (
-      <main className="min-h-screen bg-[#f2f0ea] px-4 py-8 text-[#152033] sm:grid sm:place-items-center sm:py-16">
-        <section className="w-full max-w-[720px] overflow-hidden rounded-[16px] border border-[#152033]/10 bg-[#fbfaf7] shadow-[0_24px_70px_rgba(19,31,48,0.12)]">
-          <div className="bg-[#101b2a] px-6 py-7 text-white sm:px-10 sm:py-9">
+      <main className="min-h-screen px-4 py-8 text-[#152033] sm:grid sm:place-items-center sm:py-16">
+        <section className="surface-raised w-full max-w-[720px] overflow-hidden rounded-[16px] border border-[#152033]/10 bg-[#fbfaf7]">
+          <div className="surface-ink px-6 py-7 text-white sm:px-10 sm:py-9">
             <div className="mb-7 grid size-11 place-items-center rounded-full bg-[#dcece5] text-[#1d725b]">
               <CheckCircle2 size={23} />
             </div>
@@ -127,11 +127,11 @@ export function PublicBookingExperience() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f2f0ea] text-[#152033]">
+    <div className="min-h-screen text-[#152033]">
       <header className="border-b border-[#152033]/8 bg-[#f8f7f3]">
         <div className="mx-auto flex h-[72px] max-w-[1240px] items-center justify-between px-4 sm:px-7">
           <div className="flex items-center gap-3">
-            <div className="grid size-9 place-items-center rounded-[8px] bg-[#101b2a] text-[11px] font-semibold tracking-[0.08em] text-white">SB</div>
+            <div className="surface-ink grid size-9 place-items-center rounded-[8px] text-[11px] font-semibold tracking-[0.08em] text-white shadow-[var(--shadow-sm)]">SB</div>
             <div><p className="text-sm font-semibold tracking-[-0.02em]">Sarah Bennett</p><p className="mt-0.5 text-[9px] uppercase tracking-[0.13em] text-[#8a929d]">Strategy advisory</p></div>
           </div>
           <div className="hidden items-center gap-2 text-[10px] text-[#667281] sm:flex"><ShieldCheck size={14} className="text-[#1d725b]" /> Confidential · Secure · Decision-focused</div>
@@ -144,8 +144,8 @@ export function PublicBookingExperience() {
           <div className="flex items-center gap-1.5 text-[9px] text-[#8a929d]"><Globe2 size={12} /> English · USD</div>
         </div>
 
-        <div className="grid overflow-hidden rounded-[16px] border border-[#152033]/10 bg-[#fbfaf7] shadow-[0_18px_55px_rgba(19,31,48,0.09)] lg:grid-cols-[270px_minmax(0,1fr)_280px]">
-          <aside className="border-b border-[#152033]/8 bg-[#101b2a] p-6 text-white lg:border-b-0 lg:border-r lg:border-white/8 lg:p-7">
+        <div className="surface-raised grid overflow-hidden rounded-[16px] border border-[#152033]/10 bg-[#fbfaf7] lg:grid-cols-[270px_minmax(0,1fr)_280px]">
+          <aside className="surface-ink border-b border-white/8 p-6 text-white lg:border-b-0 lg:border-r lg:border-white/8 lg:p-7">
             <div className="flex items-center gap-3 lg:block">
               <div className="grid size-14 shrink-0 place-items-center rounded-full border border-white/12 bg-[#e7e2d8] text-sm font-semibold text-[#26354b] lg:size-16">SB</div>
               <div className="lg:mt-5"><p className="text-base font-semibold">Sarah Bennett</p><p className="mt-1 text-[10px] leading-4 text-white/43">Growth and operating strategy for B2B SaaS leadership teams.</p></div>
@@ -187,9 +187,9 @@ export function PublicBookingExperience() {
             <div className="mt-8 flex items-center justify-between border-t border-[#152033]/8 pt-5">
               <button type="button" onClick={back} className={`inline-flex h-10 items-center gap-2 rounded-[8px] px-3 text-xs font-semibold text-[#697483] hover:bg-[#152033]/5 ${step === 1 ? "invisible" : ""}`}><ArrowLeft size={14} /> Back</button>
               {step < 4 ? (
-                <button type="button" onClick={next} disabled={!canContinue} className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#24529a] px-4 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(18,41,75,0.24)] hover:bg-[#1d4788] disabled:cursor-not-allowed disabled:opacity-40">Continue <ArrowRight size={14} /></button>
+                <button type="button" onClick={next} disabled={!canContinue} className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-gradient-to-b from-[#2a5aa6] to-[#204c92] px-4 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(18,41,75,0.3),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all hover:shadow-[0_2px_10px_rgba(18,41,75,0.28),inset_0_1px_0_rgba(255,255,255,0.14)] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none">Continue <ArrowRight size={14} /></button>
               ) : (
-                <button type="button" onClick={() => setConfirmed(true)} className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#1d725b] px-4 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(18,75,57,0.24)] hover:bg-[#185d4b]">Confirm session <Check size={14} /></button>
+                <button type="button" onClick={() => setConfirmed(true)} className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-gradient-to-b from-[#22826a] to-[#1a6a54] px-4 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(18,75,57,0.3),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all hover:shadow-[0_2px_10px_rgba(18,75,57,0.28),inset_0_1px_0_rgba(255,255,255,0.14)]">Confirm session <Check size={14} /></button>
               )}
             </div>
           </section>
@@ -235,7 +235,7 @@ function BookingField({ label, value, setValue, placeholder, type, optional }: {
 }
 
 function ConfirmStep({ service, day, time, name }: { service: ServiceCatalogItem; day: { day: string; date: string; month: string }; time: string; name: string }) {
-  return <div><Eyebrow>Review and protect</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">Everything is clear before you commit.</h1><p className="mt-2 text-xs leading-5 text-[#6e7987]">No card details are collected in this prototype.</p><div className="mt-6 overflow-hidden rounded-[11px] border border-[#152033]/10 bg-white"><div className="border-b border-[#152033]/8 bg-[#101b2a] p-5 text-white"><p className="text-[9px] uppercase tracking-[0.12em] text-white/40">Prepared for {name || "you"}</p><h2 className="mt-2 text-base font-semibold">{service.name}</h2><p className="mt-1 text-[10px] text-white/45">{day.day}, {day.month} {day.date} · {time} EDT</p></div><div className="grid gap-4 p-5 sm:grid-cols-2"><div><p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a929d]">Outcome</p><p className="mt-2 text-[10px] leading-5 text-[#596678]">{service.outcome}</p></div><div><p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a929d]">Protection</p><p className="mt-2 text-[10px] leading-5 text-[#596678]">Full refund until 24 hours before the session.</p></div></div></div><div className="mt-4 flex items-center justify-between rounded-[9px] border border-[#1d725b]/12 bg-[#e9f1ed] p-4"><div className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#1d725b]" /><div><p className="text-[10px] font-semibold text-[#245a49]">Prototype checkout</p><p className="mt-0.5 text-[9px] text-[#658177]">No payment will be processed</p></div></div><p className="font-mono text-sm font-semibold text-[#245a49]">{money(service.price)}</p></div></div>;
+  return <div><Eyebrow>Review and protect</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">Everything is clear before you commit.</h1><p className="mt-2 text-xs leading-5 text-[#6e7987]">No card details are collected in this prototype.</p><div className="surface-card mt-6 overflow-hidden rounded-[11px] border border-[#152033]/10 bg-white"><div className="surface-ink p-5 text-white"><p className="text-[9px] uppercase tracking-[0.12em] text-white/40">Prepared for {name || "you"}</p><h2 className="mt-2 text-base font-semibold">{service.name}</h2><p className="mt-1 text-[10px] text-white/45">{day.day}, {day.month} {day.date} · {time} EDT</p></div><div className="grid gap-4 p-5 sm:grid-cols-2"><div><p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a929d]">Outcome</p><p className="mt-2 text-[10px] leading-5 text-[#596678]">{service.outcome}</p></div><div><p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a929d]">Protection</p><p className="mt-2 text-[10px] leading-5 text-[#596678]">Full refund until 24 hours before the session.</p></div></div></div><div className="mt-4 flex items-center justify-between rounded-[9px] border border-[#1d725b]/12 bg-[#e9f1ed] p-4"><div className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#1d725b]" /><div><p className="text-[10px] font-semibold text-[#245a49]">Prototype checkout</p><p className="mt-0.5 text-[9px] text-[#658177]">No payment will be processed</p></div></div><p className="font-mono text-sm font-semibold text-[#245a49]">{money(service.price)}</p></div></div>;
 }
 
 function SummaryRow({ icon: Icon, label, value }: { icon: typeof Clock3; label: string; value: string }) {

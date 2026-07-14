@@ -1,0 +1,57 @@
+<!-- @dsCard group="Components" name="Executive hero" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConsultFlow · Executive hero</title>
+<style>
+  :root{--canvas:#f3f1ec;--canvas-warm:#f7f5f0;--ink:#152033;--ink-secondary:#526071;--ink-tertiary:#7d8794}
+  *{box-sizing:border-box}
+  body{margin:0;padding:44px;color:var(--ink);
+    font-family:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    background-color:var(--canvas);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),radial-gradient(135% 90% at 50% -12%,var(--canvas-warm),rgba(247,245,240,0) 55%);
+    -webkit-font-smoothing:antialiased;}
+  .eyebrow{font-family:"Geist Mono",ui-monospace,monospace;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--ink-tertiary);margin:0 0 8px}
+  h1{font-size:24px;font-weight:600;letter-spacing:-.03em;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--ink-secondary);margin:0 0 26px;max-width:62ch;line-height:1.5}
+  .mono{font-family:"Geist Mono",ui-monospace,monospace}
+  .hero{position:relative;overflow:hidden;border-radius:14px;color:#fff;
+    border:1px solid rgba(255,255,255,.1);padding:34px;
+    box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 22px 60px -24px rgba(11,21,34,.55);
+    background:radial-gradient(120% 140% at 12% -10%,rgba(60,92,140,.16),rgba(16,27,42,0) 46%),linear-gradient(178deg,#17263a 0%,#101b2a 52%,#0d1826 100%)}
+  .grid{position:absolute;inset:0;opacity:.12;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+    background-size:30px 30px;-webkit-mask-image:radial-gradient(120% 120% at 0% 0%,#000,transparent 78%);mask-image:radial-gradient(120% 120% at 0% 0%,#000,transparent 78%)}
+  .rel{position:relative}
+  .top{display:flex;gap:12px;align-items:center;margin-bottom:26px}
+  .tag{font-family:"Geist Mono",ui-monospace,monospace;font-size:10px;text-transform:uppercase;
+    letter-spacing:.14em;color:rgba(255,255,255,.46)}
+  .badge{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(29,114,91,.3);
+    background:rgba(29,114,91,.16);color:#8fd3ba;border-radius:999px;padding:5px 11px;font-size:10px;font-weight:600}
+  .dot{width:6px;height:6px;border-radius:999px;background:currentColor}
+  .who{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .av{width:48px;height:48px;border-radius:999px;display:grid;place-items:center;
+    background:#e7e2d8;color:#26354b;font-weight:600;font-size:14px}
+  .who .n{font-size:18px;font-weight:600;letter-spacing:-.02em}
+  .who .r{font-size:12px;color:rgba(255,255,255,.43);margin-top:3px}
+  .mandate{font-size:28px;font-weight:500;line-height:1.25;letter-spacing:-.035em;max-width:20ch;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:20px;margin-top:22px;font-size:11px;color:rgba(255,255,255,.46)}
+  .cta{margin-top:26px;display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;
+    border-radius:8px;background:#fff;color:#16243a;font-size:12.5px;font-weight:600;border:0;
+    box-shadow:0 1px 2px rgba(0,0,0,.2)}
+</style></head>
+<body>
+  <p class="eyebrow">ConsultFlow · Components</p>
+  <h1>Executive hero</h1>
+  <p class="sub">The deep-ink briefing surface: a light fall-off, a faint executive grid masked to the corner, and one confident mandate. It answers the only first question that matters — who&rsquo;s next, and is the money safe.</p>
+  <div class="hero">
+    <div class="grid"></div>
+    <div class="rel">
+      <div class="top"><span class="tag">Next engagement · 10:00 AM EDT</span><span class="badge"><span class="dot"></span>Revenue secured</span></div>
+      <div class="who"><div class="av">EP</div><div><div class="n">Elena Park</div><div class="r">COO · Meridian Labs</div></div></div>
+      <p class="mandate">Turn the Q3 growth thesis into three executable bets.</p>
+      <div class="meta"><span>&#9201; 60 min + 15 min debrief</span><span>&#128196; Brief complete</span><span>&#9678; 94 fit score</span></div>
+      <button class="cta">Open client brief &rarr;</button>
+    </div>
+  </div>
+</body></html>

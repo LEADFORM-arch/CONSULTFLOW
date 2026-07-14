@@ -227,8 +227,10 @@ function Button({
       onClick={onClick}
       className={cx(
         "inline-flex h-9 items-center justify-center gap-2 rounded-[8px] px-3.5 text-xs font-semibold transition-all duration-150 active:translate-y-px",
-        variant === "primary" && "bg-[#24529a] text-white shadow-[0_1px_2px_rgba(18,41,75,0.25)] hover:bg-[#1d4788]",
-        variant === "secondary" && "border border-[#152033]/12 bg-white text-[#253248] shadow-[0_1px_1px_rgba(21,32,51,0.04)] hover:border-[#152033]/20 hover:bg-[#faf9f6]",
+        variant === "primary" &&
+          "bg-gradient-to-b from-[#2a5aa6] to-[#204c92] text-white shadow-[0_1px_2px_rgba(18,41,75,0.3),inset_0_1px_0_rgba(255,255,255,0.14)] hover:from-[#255196] hover:to-[#1c4685] hover:shadow-[0_2px_8px_rgba(18,41,75,0.24),inset_0_1px_0_rgba(255,255,255,0.14)]",
+        variant === "secondary" &&
+          "border border-[#152033]/12 bg-white text-[#253248] shadow-[var(--shadow-sm)] hover:border-[#152033]/22 hover:bg-[#faf9f6] hover:shadow-[var(--shadow-card)]",
         variant === "ghost" && "text-[#5c6878] hover:bg-[#152033]/5 hover:text-[#152033]",
         className,
       )}
@@ -273,12 +275,12 @@ export function ConsultFlowApp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f2ed] text-[#152033] lg:flex">
+    <div className="min-h-screen text-[#152033] lg:flex">
       <Sidebar activeView={activeView} chooseView={chooseView} />
 
       {mobileMenu && (
         <div className="modal-backdrop fixed inset-0 z-40 bg-[#0b1522]/55 lg:hidden" onClick={() => setMobileMenu(false)}>
-          <div className="modal-panel h-full w-[280px] bg-[#101b2a] p-4" onClick={(event) => event.stopPropagation()}>
+          <div className="surface-ink modal-panel h-full w-[280px] p-4 shadow-[var(--shadow-modal)]" onClick={(event) => event.stopPropagation()}>
             <div className="mb-7 flex items-center justify-between">
               <div className="flex items-center gap-3 text-white"><Mark /><span className="font-semibold">ConsultFlow</span></div>
               <button type="button" aria-label="Close menu" onClick={() => setMobileMenu(false)} className="rounded-md p-2 text-white/60 hover:bg-white/10 hover:text-white"><X size={18} /></button>
@@ -289,7 +291,7 @@ export function ConsultFlowApp() {
       )}
 
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#152033]/8 bg-[#f4f2ed]/92 px-4 backdrop-blur-xl sm:px-7 lg:px-9">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#152033]/8 bg-[#f3f1ec]/80 px-4 backdrop-blur-xl sm:px-7 lg:px-9">
           <div className="flex items-center gap-3">
             <button type="button" aria-label="Open menu" onClick={() => setMobileMenu(true)} className="rounded-md border border-[#152033]/10 bg-white p-2 text-[#485568] lg:hidden"><Menu size={17} /></button>
             <div className="hidden items-center gap-2 text-xs text-[#79828f] sm:flex">
@@ -311,7 +313,7 @@ export function ConsultFlowApp() {
               className="relative grid size-9 place-items-center rounded-[8px] text-[#687381] hover:bg-[#152033]/5 hover:text-[#152033]"
             >
               <Bell size={17} />
-              {notifications > 0 && <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-[#ad642d] ring-2 ring-[#f4f2ed]" />}
+              {notifications > 0 && <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-[#ad642d] ring-2 ring-[#f3f1ec]" />}
             </button>
             <button type="button" onClick={() => notify("Account controls are ready for connection.")} className="flex h-9 items-center gap-2 rounded-[8px] px-1.5 hover:bg-[#152033]/5">
               <Avatar initials="SB" size="sm" />
@@ -352,7 +354,7 @@ export function ConsultFlowApp() {
       {modal === "search" && <SearchModal close={() => setModal(null)} chooseView={(view) => { setModal(null); setActiveView(view); }} />}
 
       {toast && (
-        <div role="status" className="toast-in fixed bottom-20 right-4 z-[70] flex max-w-[360px] items-center gap-3 rounded-[10px] border border-white/10 bg-[#101b2a] px-4 py-3 text-xs text-white shadow-[0_18px_50px_rgba(16,27,42,0.28)] sm:bottom-6 sm:right-6">
+        <div role="status" className="surface-ink toast-in fixed bottom-20 right-4 z-[70] flex max-w-[360px] items-center gap-3 rounded-[10px] border border-white/10 px-4 py-3 text-xs text-white shadow-[var(--shadow-modal)] sm:bottom-6 sm:right-6">
           <CheckCircle2 size={16} className="shrink-0 text-[#7bc3a8]" />
           <span>{toast}</span>
         </div>
@@ -363,7 +365,7 @@ export function ConsultFlowApp() {
 
 function Sidebar({ activeView, chooseView }: { activeView: ViewId; chooseView: (view: ViewId) => void }) {
   return (
-    <aside className="fine-scrollbar sticky top-0 hidden h-screen w-[236px] shrink-0 flex-col overflow-y-auto border-r border-white/7 bg-[#101b2a] px-3 py-4 text-white lg:flex">
+    <aside className="surface-ink fine-scrollbar sticky top-0 hidden h-screen w-[236px] shrink-0 flex-col overflow-y-auto border-r border-white/7 px-3 py-4 text-white shadow-[8px_0_40px_-24px_rgba(11,21,34,0.6)] lg:flex">
       <div className="mb-8 flex items-center gap-3 px-2">
         <Mark />
         <div><p className="text-[14px] font-semibold tracking-[-0.02em]">ConsultFlow</p><p className="mt-0.5 text-[9px] uppercase tracking-[0.16em] text-white/35">Private practice OS</p></div>
@@ -426,7 +428,7 @@ function MobileBottomNav({ activeView, chooseView }: { activeView: ViewId; choos
 function BriefingView({ openBrief, notify }: { openBrief: () => void; notify: (message: string) => void }) {
   return (
     <div className="space-y-5">
-      <section className="grid overflow-hidden rounded-[14px] border border-[#152033]/10 bg-[#101b2a] text-white shadow-[0_10px_35px_rgba(16,27,42,0.12)] xl:grid-cols-[1.65fr_0.7fr]">
+      <section className="surface-ink surface-ink-shadow grid overflow-hidden rounded-[14px] border border-white/10 text-white xl:grid-cols-[1.65fr_0.7fr]">
         <div className="relative overflow-hidden p-5 sm:p-7">
           <div className="executive-grid pointer-events-none absolute inset-0 opacity-[0.12]" />
           <div className="relative">
@@ -455,7 +457,7 @@ function BriefingView({ openBrief, notify }: { openBrief: () => void; notify: (m
         </div>
       </section>
 
-      <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
+      <section className="overflow-hidden surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
         <div className="flex items-center justify-between border-b border-[#152033]/8 px-5 py-3.5"><div><p className="text-xs font-semibold">Firm pulse</p><p className="mt-0.5 text-[10px] text-[#7b8490]">July 1–14 · cash basis</p></div><button type="button" onClick={() => notify("Firm pulse refreshed just now.")} className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#6c7684] hover:text-[#24529a]">Live data</button></div>
         <div className="grid divide-y divide-[#152033]/8 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
           <PulseMetric label="Revenue secured" value="$18,950" note="+$3,200 vs. last period" tone="green" />
@@ -466,7 +468,7 @@ function BriefingView({ openBrief, notify }: { openBrief: () => void; notify: (m
       </section>
 
       <div className="grid gap-5 xl:grid-cols-[1.55fr_0.8fr]">
-        <section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
+        <section className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
           <div className="flex items-center justify-between border-b border-[#152033]/8 px-5 py-4"><div><h2 className="text-sm font-semibold tracking-[-0.015em]">Today’s engagement rail</h2><p className="mt-1 text-[10px] text-[#7b8490]">$4,400 protected across 3 client decisions</p></div><button type="button" onClick={() => notify("Calendar view is now synchronized.")} className="text-[11px] font-semibold text-[#24529a] hover:text-[#183d78]">Open schedule</button></div>
           <div className="divide-y divide-[#152033]/7">
             {engagementRows.map((row, index) => <EngagementRow key={row.client} {...row} last={index === engagementRows.length - 1} openBrief={openBrief} />)}
@@ -496,7 +498,7 @@ function EngagementRow({ time, meridiem, client, initials, service, value, stage
 
 function AttentionPanel({ notify }: { notify: (message: string) => void }) {
   return (
-    <section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5">
+    <section className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5">
       <div className="mb-5 flex items-start justify-between"><div><h2 className="text-sm font-semibold">Needs your judgment</h2><p className="mt-1 text-[10px] text-[#7b8490]">Two items, about six minutes</p></div><span className="grid size-6 place-items-center rounded-full bg-[#f3e7db] font-mono text-[10px] font-semibold text-[#9a5929]">2</span></div>
       <div className="space-y-3">
         <div className="rounded-[10px] border border-[#152033]/9 bg-white p-4"><div className="mb-3 flex items-center gap-2"><CreditCard size={14} className="text-[#ad642d]" /><p className="text-[11px] font-semibold">Invoice #1042 is due tomorrow</p></div><p className="text-[10px] leading-5 text-[#707b89]">$1,200 · Volt Systems · viewed twice</p><div className="mt-3 flex gap-2"><Button onClick={() => notify("A professional payment reminder was sent.")} className="h-8 flex-1">Send reminder</Button><Button variant="ghost" onClick={() => notify("Invoice #1042 opened.")} className="h-8 px-2.5"><ArrowUpRight size={13} /></Button></div></div>
@@ -510,7 +512,7 @@ function ScheduleView({ openBrief, notify }: { openBrief: () => void; notify: (m
   const [mode, setMode] = useState<"Day" | "Week">("Day");
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_280px]">
-      <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
+      <section className="overflow-hidden surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#152033]/8 px-5 py-4"><div className="flex items-center gap-3"><button type="button" className="text-[#77818e]"><ChevronRight size={16} className="rotate-180" /></button><p className="text-sm font-semibold">Tuesday, July 14</p><button type="button" className="text-[#77818e]"><ChevronRight size={16} /></button></div><div className="flex rounded-[8px] bg-[#ebe9e4] p-1">{(["Day", "Week"] as const).map((item) => <button type="button" key={item} onClick={() => setMode(item)} className={cx("rounded-[6px] px-3 py-1.5 text-[10px] font-semibold", mode === item ? "bg-white text-[#253248] shadow-sm" : "text-[#7a8491]")}>{item}</button>)}</div></div>
         {mode === "Day" ? (
           <div className="relative px-4 py-2 sm:px-6">
@@ -521,7 +523,7 @@ function ScheduleView({ openBrief, notify }: { openBrief: () => void; notify: (m
         ) : <WeekGrid openBrief={openBrief} />}
       </section>
       <section className="space-y-5">
-        <div className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><p className="text-xs font-semibold">Capacity guardrails</p><div className="mt-5 space-y-4"><Capacity label="Client work" value="4h 15m" width="72%" color="bg-[#24529a]" /><Capacity label="Preparation" value="1h 30m" width="42%" color="bg-[#8099b8]" /><Capacity label="Recovery" value="45m" width="28%" color="bg-[#a47635]" /></div><p className="mt-5 border-t border-[#152033]/8 pt-4 text-[10px] leading-5 text-[#707b89]">You have a healthy 2h 15m of uncommitted capacity today.</p></div>
+        <div className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><p className="text-xs font-semibold">Capacity guardrails</p><div className="mt-5 space-y-4"><Capacity label="Client work" value="4h 15m" width="72%" color="bg-[#24529a]" /><Capacity label="Preparation" value="1h 30m" width="42%" color="bg-[#8099b8]" /><Capacity label="Recovery" value="45m" width="28%" color="bg-[#a47635]" /></div><p className="mt-5 border-t border-[#152033]/8 pt-4 text-[10px] leading-5 text-[#707b89]">You have a healthy 2h 15m of uncommitted capacity today.</p></div>
         <div className="rounded-[12px] border border-[#1d725b]/15 bg-[#eaf2ed] p-5"><ShieldCheck size={18} className="text-[#1d725b]" /><p className="mt-3 text-xs font-semibold text-[#174f40]">Revenue is fully protected</p><p className="mt-2 text-[10px] leading-5 text-[#477064]">Every external meeting today is paid or deposit-secured.</p></div>
       </section>
     </div>
@@ -617,7 +619,7 @@ function ServicesView({ notify }: { notify: (message: string) => void }) {
 
   if (!selected) {
     return (
-      <section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] px-6 py-16 text-center">
+      <section className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] px-6 py-16 text-center">
         <Layers3 size={24} className="mx-auto text-[#8d96a1]" />
         <h2 className="mt-4 text-sm font-semibold">Build your first client offer</h2>
         <p className="mx-auto mt-2 max-w-md text-[10px] leading-5 text-[#77818d]">Define the decision, commercial terms, and qualification gate before publishing.</p>
@@ -628,7 +630,7 @@ function ServicesView({ notify }: { notify: (message: string) => void }) {
 
   return (
     <div className="space-y-5">
-      <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#101b2a] text-white">
+      <section className="surface-ink surface-ink-shadow overflow-hidden rounded-[12px] border border-white/10 text-white">
         <div className="grid divide-y divide-white/8 sm:grid-cols-[1.2fr_1fr_1fr_auto] sm:divide-x sm:divide-y-0">
           <div className="p-5 sm:p-6">
             <p className="font-mono text-[9px] uppercase tracking-[0.13em] text-white/36">Offer ledger</p>
@@ -642,7 +644,7 @@ function ServicesView({ notify }: { notify: (message: string) => void }) {
       </section>
 
       <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.45fr)_360px]">
-        <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
+        <section className="overflow-hidden surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
           <div className="flex flex-col gap-4 border-b border-[#152033]/8 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <div><h2 className="text-sm font-semibold">Client-facing offers</h2><p className="mt-1 text-[10px] text-[#7b8490]">Select an offer to inspect its commercial guardrails.</p></div>
             <div className="flex rounded-[8px] bg-[#ebe9e4] p-1">{(["all", "published", "draft"] as const).map((item) => <button key={item} type="button" onClick={() => setFilter(item)} className={cx("rounded-[6px] px-3 py-1.5 text-[9px] font-semibold capitalize", filter === item ? "bg-white text-[#253248] shadow-sm" : "text-[#78828f]")}>{item}</button>)}</div>
@@ -661,7 +663,7 @@ function ServicesView({ notify }: { notify: (message: string) => void }) {
           {visible.length === 0 && <div className="px-5 py-14 text-center"><Layers3 size={21} className="mx-auto text-[#9ba2ab]" /><p className="mt-3 text-xs font-semibold">No {filter} offers</p><p className="mt-1 text-[10px] text-[#818a96]">Change the filter or create a new service.</p></div>}
         </section>
 
-        <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] xl:sticky xl:top-24">
+        <section className="overflow-hidden surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] xl:sticky xl:top-24">
           <div className="flex items-start justify-between border-b border-[#152033]/8 px-5 py-4"><div><p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#8a929d]">Offer controls</p><h2 className="mt-1.5 text-sm font-semibold">Edit service</h2></div><button type="button" onClick={duplicateService} className="rounded-[7px] p-2 text-[#6f7a88] hover:bg-[#152033]/5 hover:text-[#24529a]" aria-label="Duplicate service"><Copy size={14} /></button></div>
           <div className="space-y-4 p-5">
             <ServiceField label="Service name" value={selected.name} onChange={(value) => updateSelected("name", value)} />
@@ -700,8 +702,8 @@ function EngagementsView({ openBrief, notify }: { openBrief: () => void; notify:
   ];
   return (
     <div className="space-y-5">
-      <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]"><div className="border-b border-[#152033]/8 px-5 py-4"><h2 className="text-sm font-semibold">Engagement lifecycle</h2><p className="mt-1 text-[10px] text-[#7b8490]">30 active and completed engagements · Q3</p></div><div className="grid divide-y divide-[#152033]/8 sm:grid-cols-5 sm:divide-x sm:divide-y-0">{stages.map((stage) => <button key={stage.label} type="button" onClick={() => notify(`${stage.label} engagements filtered.`)} className="p-5 text-left hover:bg-[#f3f1ec]"><span className={cx("mb-4 block h-1 w-8 rounded-full", stage.color)} /><p className="text-[10px] text-[#79828f]">{stage.label}</p><div className="mt-2 flex items-end justify-between"><p className="font-mono text-lg font-semibold">{stage.count}</p><p className="font-mono text-[10px] text-[#536074]">{stage.value}</p></div></button>)}</div></section>
-      <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#152033]/8 px-5 py-4"><div><h2 className="text-sm font-semibold">Active work</h2><p className="mt-1 text-[10px] text-[#7b8490]">Sorted by next decision</p></div><div className="flex gap-2"><Button><Search size={13} /> Filter</Button><Button><ChevronDown size={13} /> All stages</Button></div></div><div className="divide-y divide-[#152033]/7">{engagementRows.concat([{ ...engagementRows[0], client: "Volt Systems", initials: "VS", service: "Market entry advisory", time: "JUL 16", meridiem: "NEXT", value: "$3,800", stage: "Secured", detail: "Proposal signed · Kickoff ready" }]).map((row, index) => <EngagementRow key={`${row.client}-${index}`} {...row} last={false} openBrief={openBrief} />)}</div></section>
+      <section className="overflow-hidden surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]"><div className="border-b border-[#152033]/8 px-5 py-4"><h2 className="text-sm font-semibold">Engagement lifecycle</h2><p className="mt-1 text-[10px] text-[#7b8490]">30 active and completed engagements · Q3</p></div><div className="grid divide-y divide-[#152033]/8 sm:grid-cols-5 sm:divide-x sm:divide-y-0">{stages.map((stage) => <button key={stage.label} type="button" onClick={() => notify(`${stage.label} engagements filtered.`)} className="p-5 text-left hover:bg-[#f3f1ec]"><span className={cx("mb-4 block h-1 w-8 rounded-full", stage.color)} /><p className="text-[10px] text-[#79828f]">{stage.label}</p><div className="mt-2 flex items-end justify-between"><p className="font-mono text-lg font-semibold">{stage.count}</p><p className="font-mono text-[10px] text-[#536074]">{stage.value}</p></div></button>)}</div></section>
+      <section className="overflow-hidden surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#152033]/8 px-5 py-4"><div><h2 className="text-sm font-semibold">Active work</h2><p className="mt-1 text-[10px] text-[#7b8490]">Sorted by next decision</p></div><div className="flex gap-2"><Button><Search size={13} /> Filter</Button><Button><ChevronDown size={13} /> All stages</Button></div></div><div className="divide-y divide-[#152033]/7">{engagementRows.concat([{ ...engagementRows[0], client: "Volt Systems", initials: "VS", service: "Market entry advisory", time: "JUL 16", meridiem: "NEXT", value: "$3,800", stage: "Secured", detail: "Proposal signed · Kickoff ready" }]).map((row, index) => <EngagementRow key={`${row.client}-${index}`} {...row} last={false} openBrief={openBrief} />)}</div></section>
     </div>
   );
 }
@@ -710,7 +712,7 @@ function ClientsView({ openBrief }: { openBrief: () => void }) {
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => clients.filter((client) => `${client.name} ${client.company}`.toLowerCase().includes(query.toLowerCase())), [query]);
   return (
-    <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
+    <section className="overflow-hidden surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
       <div className="flex flex-col gap-4 border-b border-[#152033]/8 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="text-sm font-semibold">Relationship book</h2><p className="mt-1 text-[10px] text-[#7b8490]">42 clients · $94,800 lifetime value</p></div><label className="flex h-9 items-center gap-2 rounded-[8px] border border-[#152033]/10 bg-[#ebe9e4] px-3"><Search size={14} className="text-[#7c8692]" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a client" className="w-44 bg-transparent text-xs outline-none placeholder:text-[#9299a2]" /></label></div>
       <div className="overflow-x-auto"><table className="w-full min-w-[760px] border-collapse"><thead><tr className="border-b border-[#152033]/8 text-left text-[9px] uppercase tracking-[0.09em] text-[#8a929d]"><th className="px-5 py-3 font-semibold">Client</th><th className="px-4 py-3 font-semibold">Active work</th><th className="px-4 py-3 font-semibold">Last touch</th><th className="px-4 py-3 font-semibold">Lifetime value</th><th className="px-4 py-3 font-semibold">Relationship</th><th className="w-12 px-4 py-3" /></tr></thead><tbody>{filtered.map((client) => <tr key={client.name} onClick={openBrief} className="cursor-pointer border-b border-[#152033]/6 last:border-0 hover:bg-[#f2f0eb]"><td className="px-5 py-4"><div className="flex items-center gap-3"><Avatar initials={client.initials} /><div><p className="text-xs font-semibold">{client.name}</p><p className="mt-1 text-[10px] text-[#7d8793]">{client.company}</p></div></div></td><td className="px-4 py-4 text-[11px] text-[#596575]">{client.work}</td><td className="px-4 py-4 font-mono text-[10px] text-[#6d7784]">{client.last}</td><td className="px-4 py-4 font-mono text-[11px] font-semibold">{client.ltv}</td><td className="px-4 py-4"><StatusBadge tone={client.health === "Strong" ? "green" : client.health === "Watch" ? "amber" : "blue"}>{client.health}</StatusBadge></td><td className="px-4 py-4"><ChevronRight size={14} className="text-[#a0a7b0]" /></td></tr>)}</tbody></table></div>
       {filtered.length === 0 && <div className="px-5 py-16 text-center"><Users size={22} className="mx-auto text-[#9ba2ab]" /><p className="mt-3 text-xs font-semibold">No relationship found</p><p className="mt-1 text-[10px] text-[#818a96]">Try a client or company name.</p></div>}
@@ -721,8 +723,8 @@ function ClientsView({ openBrief }: { openBrief: () => void }) {
 function RevenueView({ notify }: { notify: (message: string) => void }) {
   return (
     <div className="grid gap-5 xl:grid-cols-[1.45fr_0.75fr]">
-      <section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-[10px] font-medium text-[#7a8491]">Net revenue secured · July</p><p className="mt-2 font-mono text-[30px] font-semibold tracking-[-0.05em]">$18,950</p><p className="mt-1 text-[10px] text-[#1d725b]">↑ 20.3% from the same period in June</p></div><Button onClick={() => notify("Revenue report exported as a board-ready PDF.")}><FileText size={13} /> Export report</Button></div><div className="mt-8 h-[250px] w-full"><RevenueChart /></div><div className="mt-5 grid grid-cols-3 border-t border-[#152033]/8 pt-5"><div><p className="text-[9px] text-[#818a96]">Collected</p><p className="mt-1 font-mono text-xs font-semibold">$14,350</p></div><div><p className="text-[9px] text-[#818a96]">Due</p><p className="mt-1 font-mono text-xs font-semibold">$4,600</p></div><div><p className="text-[9px] text-[#818a96]">At risk</p><p className="mt-1 font-mono text-xs font-semibold text-[#ad642d]">$1,200</p></div></div></section>
-      <div className="space-y-5"><section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><div className="flex items-center justify-between"><h2 className="text-sm font-semibold">Protection coverage</h2><ShieldCheck size={17} className="text-[#1d725b]" /></div><div className="my-6 grid place-items-center"><div className="relative grid size-36 place-items-center rounded-full" style={{ background: "conic-gradient(#1d725b 0 92%, #e2dfd8 92% 100%)" }}><div className="grid size-[112px] place-items-center rounded-full bg-[#fbfaf7] text-center"><div><p className="font-mono text-2xl font-semibold">92%</p><p className="mt-1 text-[9px] text-[#7e8793]">protected</p></div></div></div></div><p className="text-center text-[10px] leading-5 text-[#6c7785]">$1,200 is exposed across one invoice. Everything else is paid, held, or covered by policy.</p></section><section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><h2 className="text-sm font-semibold">Collection rhythm</h2><div className="mt-4 space-y-3">{[["Upfront", "68%", "green"], ["Net 7", "24%", "blue"], ["Net 30", "8%", "amber"]].map(([label, value, tone]) => <div key={label} className="flex items-center justify-between border-b border-[#152033]/7 pb-3 last:border-0 last:pb-0"><span className="text-[10px] text-[#647080]">{label}</span><span className={cx("font-mono text-[10px] font-semibold", tone === "green" ? "text-[#1d725b]" : tone === "blue" ? "text-[#24529a]" : "text-[#ad642d]")}>{value}</span></div>)}</div></section></div>
+      <section className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-[10px] font-medium text-[#7a8491]">Net revenue secured · July</p><p className="mt-2 font-mono text-[30px] font-semibold tracking-[-0.05em]">$18,950</p><p className="mt-1 text-[10px] text-[#1d725b]">↑ 20.3% from the same period in June</p></div><Button onClick={() => notify("Revenue report exported as a board-ready PDF.")}><FileText size={13} /> Export report</Button></div><div className="mt-8 h-[250px] w-full"><RevenueChart /></div><div className="mt-5 grid grid-cols-3 border-t border-[#152033]/8 pt-5"><div><p className="text-[9px] text-[#818a96]">Collected</p><p className="mt-1 font-mono text-xs font-semibold">$14,350</p></div><div><p className="text-[9px] text-[#818a96]">Due</p><p className="mt-1 font-mono text-xs font-semibold">$4,600</p></div><div><p className="text-[9px] text-[#818a96]">At risk</p><p className="mt-1 font-mono text-xs font-semibold text-[#ad642d]">$1,200</p></div></div></section>
+      <div className="space-y-5"><section className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><div className="flex items-center justify-between"><h2 className="text-sm font-semibold">Protection coverage</h2><ShieldCheck size={17} className="text-[#1d725b]" /></div><div className="my-6 grid place-items-center"><div className="relative grid size-36 place-items-center rounded-full" style={{ background: "conic-gradient(#1d725b 0 92%, #e2dfd8 92% 100%)" }}><div className="grid size-[112px] place-items-center rounded-full bg-[#fbfaf7] text-center"><div><p className="font-mono text-2xl font-semibold">92%</p><p className="mt-1 text-[9px] text-[#7e8793]">protected</p></div></div></div></div><p className="text-center text-[10px] leading-5 text-[#6c7785]">$1,200 is exposed across one invoice. Everything else is paid, held, or covered by policy.</p></section><section className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><h2 className="text-sm font-semibold">Collection rhythm</h2><div className="mt-4 space-y-3">{[["Upfront", "68%", "green"], ["Net 7", "24%", "blue"], ["Net 30", "8%", "amber"]].map(([label, value, tone]) => <div key={label} className="flex items-center justify-between border-b border-[#152033]/7 pb-3 last:border-0 last:pb-0"><span className="text-[10px] text-[#647080]">{label}</span><span className={cx("font-mono text-[10px] font-semibold", tone === "green" ? "text-[#1d725b]" : tone === "blue" ? "text-[#24529a]" : "text-[#ad642d]")}>{value}</span></div>)}</div></section></div>
     </div>
   );
 }
@@ -737,7 +739,7 @@ function IntelligenceView({ notify }: { notify: (message: string) => void }) {
     { label: "Capacity", title: "Thursday afternoons are eroding your follow-through.", body: "Action completion falls 23% when more than three sessions are booked after 1 PM.", action: "Protect Thursdays", impact: "3h recovered", tone: "amber" },
     { label: "Retention", title: "Three clients are ready for a quarterly advisory package.", body: "Their repeat cadence and project history match your highest-retaining accounts.", action: "Draft proposals", impact: "$12.6k potential", tone: "green" },
   ];
-  return <div className="grid gap-5 xl:grid-cols-[1.4fr_0.7fr]"><section className="space-y-4">{insights.map((insight, index) => <article key={insight.title} className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5 sm:p-6"><div className="flex gap-4"><span className="font-mono text-[10px] text-[#a0a7b0]">0{index + 1}</span><div className="flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><StatusBadge tone={insight.tone as "blue" | "amber" | "green"}>{insight.label}</StatusBadge><span className="font-mono text-[10px] font-semibold text-[#1d725b]">{insight.impact}</span></div><h2 className="mt-4 text-lg font-semibold leading-7 tracking-[-0.025em]">{insight.title}</h2><p className="mt-2 max-w-2xl text-xs leading-6 text-[#6d7886]">{insight.body}</p><Button onClick={() => notify(`${insight.action} — recommendation accepted.`)} className="mt-4">{insight.action} <ArrowRight size={13} /></Button></div></div></article>)}</section><aside className="space-y-5"><section className="rounded-[12px] border border-[#152033]/10 bg-[#101b2a] p-5 text-white"><Sparkles size={18} className="text-[#8faed5]" /><h2 className="mt-4 text-base font-semibold">Ask your practice</h2><p className="mt-2 text-[10px] leading-5 text-white/48">ConsultFlow reasons across client history, delivery patterns, and cash flow.</p><div className="mt-5 space-y-2">{["Where am I losing margin?", "Who should I follow up with?", "Prepare me for Meridian Labs"].map((question) => <button type="button" key={question} onClick={() => notify(`Analyzing: ${question}`)} className="flex w-full items-center justify-between rounded-[8px] border border-white/8 bg-white/[0.04] px-3 py-2.5 text-left text-[10px] text-white/65 hover:bg-white/[0.08] hover:text-white">{question}<ArrowRight size={12} /></button>)}</div></section><section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><p className="text-xs font-semibold">Intelligence confidence</p><div className="mt-4 flex items-center gap-4"><div className="grid size-12 place-items-center rounded-full border-[5px] border-[#1d725b] font-mono text-[10px] font-semibold">89</div><p className="text-[10px] leading-5 text-[#6d7886]">High confidence<br /><span className="text-[#9aa1aa]">Based on 86 sessions</span></p></div></section></aside></div>;
+  return <div className="grid gap-5 xl:grid-cols-[1.4fr_0.7fr]"><section className="space-y-4">{insights.map((insight, index) => <article key={insight.title} className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5 sm:p-6"><div className="flex gap-4"><span className="font-mono text-[10px] text-[#a0a7b0]">0{index + 1}</span><div className="flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><StatusBadge tone={insight.tone as "blue" | "amber" | "green"}>{insight.label}</StatusBadge><span className="font-mono text-[10px] font-semibold text-[#1d725b]">{insight.impact}</span></div><h2 className="mt-4 text-lg font-semibold leading-7 tracking-[-0.025em]">{insight.title}</h2><p className="mt-2 max-w-2xl text-xs leading-6 text-[#6d7886]">{insight.body}</p><Button onClick={() => notify(`${insight.action} — recommendation accepted.`)} className="mt-4">{insight.action} <ArrowRight size={13} /></Button></div></div></article>)}</section><aside className="space-y-5"><section className="surface-ink surface-ink-shadow rounded-[12px] border border-white/10 p-5 text-white"><Sparkles size={18} className="text-[#8faed5]" /><h2 className="mt-4 text-base font-semibold">Ask your practice</h2><p className="mt-2 text-[10px] leading-5 text-white/48">ConsultFlow reasons across client history, delivery patterns, and cash flow.</p><div className="mt-5 space-y-2">{["Where am I losing margin?", "Who should I follow up with?", "Prepare me for Meridian Labs"].map((question) => <button type="button" key={question} onClick={() => notify(`Analyzing: ${question}`)} className="flex w-full items-center justify-between rounded-[8px] border border-white/8 bg-white/[0.04] px-3 py-2.5 text-left text-[10px] text-white/65 hover:bg-white/[0.08] hover:text-white">{question}<ArrowRight size={12} /></button>)}</div></section><section className="surface-card rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] p-5"><p className="text-xs font-semibold">Intelligence confidence</p><div className="mt-4 flex items-center gap-4"><div className="grid size-12 place-items-center rounded-full border-[5px] border-[#1d725b] font-mono text-[10px] font-semibold">89</div><p className="text-[10px] leading-5 text-[#6d7886]">High confidence<br /><span className="text-[#9aa1aa]">Based on 86 sessions</span></p></div></section></aside></div>;
 }
 
 function ModalShell({ children, close, title }: { children: React.ReactNode; close: () => void; title: string }) {
@@ -755,7 +757,7 @@ function Field({ label, value, setValue, placeholder, required }: { label: strin
 }
 
 function ClientBriefModal({ close, notify }: { close: () => void; notify: (message: string) => void }) {
-  return <ModalShell close={close} title="Client brief"><div className="bg-[#101b2a] px-6 py-5 text-white"><div className="flex items-start justify-between"><div className="flex items-center gap-3"><Avatar initials="EP" size="lg" /><div><p className="text-base font-semibold">Elena Park</p><p className="mt-1 text-[10px] text-white/45">COO · Meridian Labs · Client since 2025</p></div></div><button type="button" onClick={close} aria-label="Close" className="rounded-md p-2 text-white/50 hover:bg-white/8 hover:text-white"><X size={17} /></button></div><div className="mt-6 grid grid-cols-3 divide-x divide-white/10 border-y border-white/8 py-4 text-center"><div><p className="font-mono text-sm font-semibold">$18.7k</p><p className="mt-1 text-[8px] text-white/36">Lifetime value</p></div><div><p className="font-mono text-sm font-semibold">12</p><p className="mt-1 text-[8px] text-white/36">Sessions</p></div><div><p className="font-mono text-sm font-semibold">94</p><p className="mt-1 text-[8px] text-white/36">Fit score</p></div></div></div><div className="space-y-6 p-6"><div><p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#8a929d]">Today’s mandate</p><h2 className="mt-2 text-lg font-semibold leading-7 tracking-[-0.025em]">Turn the Q3 growth thesis into three executable bets.</h2></div><div className="grid gap-3 sm:grid-cols-2"><BriefSection title="Context" items={["Board wants a focused Q3 plan by July 24", "Enterprise pipeline is up 31%", "Product team has one open leadership role"]} /><BriefSection title="Open decisions" items={["Enterprise vs. mid-market allocation", "August hiring sequence", "Single accountable growth owner"]} /></div><div><p className="mb-3 text-[10px] font-semibold text-[#526073]">Relationship timeline</p><div className="space-y-3 border-l border-[#152033]/10 pl-4"><TimelineItem date="JUL 11" title="Elena completed the strategy intake" detail="94 fit score · all documents received" /><TimelineItem date="JUN 28" title="Q2 operating review completed" detail="3 decisions · 5 actions closed" /><TimelineItem date="JUN 05" title="Advisory retainer renewed" detail="$7,500 secured" /></div></div></div><div className="flex flex-wrap justify-end gap-2 border-t border-[#152033]/8 px-6 py-4"><Button onClick={() => notify("A concise client reminder was sent to Elena.")}>Message client</Button><Button variant="primary" onClick={() => notify("Meeting room will open five minutes before the session.")}>Join at 9:55 AM <ArrowUpRight size={13} /></Button></div></ModalShell>;
+  return <ModalShell close={close} title="Client brief"><div className="surface-ink px-6 py-5 text-white"><div className="flex items-start justify-between"><div className="flex items-center gap-3"><Avatar initials="EP" size="lg" /><div><p className="text-base font-semibold">Elena Park</p><p className="mt-1 text-[10px] text-white/45">COO · Meridian Labs · Client since 2025</p></div></div><button type="button" onClick={close} aria-label="Close" className="rounded-md p-2 text-white/50 hover:bg-white/8 hover:text-white"><X size={17} /></button></div><div className="mt-6 grid grid-cols-3 divide-x divide-white/10 border-y border-white/8 py-4 text-center"><div><p className="font-mono text-sm font-semibold">$18.7k</p><p className="mt-1 text-[8px] text-white/36">Lifetime value</p></div><div><p className="font-mono text-sm font-semibold">12</p><p className="mt-1 text-[8px] text-white/36">Sessions</p></div><div><p className="font-mono text-sm font-semibold">94</p><p className="mt-1 text-[8px] text-white/36">Fit score</p></div></div></div><div className="space-y-6 p-6"><div><p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#8a929d]">Today’s mandate</p><h2 className="mt-2 text-lg font-semibold leading-7 tracking-[-0.025em]">Turn the Q3 growth thesis into three executable bets.</h2></div><div className="grid gap-3 sm:grid-cols-2"><BriefSection title="Context" items={["Board wants a focused Q3 plan by July 24", "Enterprise pipeline is up 31%", "Product team has one open leadership role"]} /><BriefSection title="Open decisions" items={["Enterprise vs. mid-market allocation", "August hiring sequence", "Single accountable growth owner"]} /></div><div><p className="mb-3 text-[10px] font-semibold text-[#526073]">Relationship timeline</p><div className="space-y-3 border-l border-[#152033]/10 pl-4"><TimelineItem date="JUL 11" title="Elena completed the strategy intake" detail="94 fit score · all documents received" /><TimelineItem date="JUN 28" title="Q2 operating review completed" detail="3 decisions · 5 actions closed" /><TimelineItem date="JUN 05" title="Advisory retainer renewed" detail="$7,500 secured" /></div></div></div><div className="flex flex-wrap justify-end gap-2 border-t border-[#152033]/8 px-6 py-4"><Button onClick={() => notify("A concise client reminder was sent to Elena.")}>Message client</Button><Button variant="primary" onClick={() => notify("Meeting room will open five minutes before the session.")}>Join at 9:55 AM <ArrowUpRight size={13} /></Button></div></ModalShell>;
 }
 
 function BriefSection({ title, items }: { title: string; items: string[] }) {

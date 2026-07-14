@@ -1,0 +1,46 @@
+<!-- @dsCard group="Foundations" name="Typography" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConsultFlow · Typography</title>
+<style>
+  :root{--canvas:#f3f1ec;--canvas-warm:#f7f5f0;--paper:#fbfaf7;--ink:#152033;
+    --ink-secondary:#526071;--ink-tertiary:#7d8794;--line:rgba(21,32,51,.12);--cobalt:#24529a}
+  *{box-sizing:border-box}
+  body{margin:0;padding:44px;color:var(--ink);
+    font-family:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    background-color:var(--canvas);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),radial-gradient(135% 90% at 50% -12%,var(--canvas-warm),rgba(247,245,240,0) 55%);
+    -webkit-font-smoothing:antialiased;}
+  .eyebrow{font-family:"Geist Mono",ui-monospace,monospace;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--ink-tertiary);margin:0 0 8px}
+  h1{font-size:24px;font-weight:600;letter-spacing:-.03em;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--ink-secondary);margin:0 0 28px;max-width:62ch;line-height:1.5}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 24px;
+    box-shadow:0 1px 2px rgba(21,32,51,.04),0 8px 20px -12px rgba(21,32,51,.14)}
+  .row{display:flex;align-items:baseline;gap:20px;padding:16px 0;border-bottom:1px solid rgba(21,32,51,.07)}
+  .row:last-child{border-bottom:0}
+  .tag{flex:0 0 128px;font-family:"Geist Mono",ui-monospace,monospace;font-size:10.5px;
+    color:var(--ink-tertiary);text-transform:uppercase;letter-spacing:.06em}
+  .mono{font-family:"Geist Mono",ui-monospace,"SF Mono","JetBrains Mono",monospace}
+  .h-display{font-size:34px;font-weight:600;letter-spacing:-.035em}
+  .h-title{font-size:22px;font-weight:600;letter-spacing:-.025em}
+  .h-headline{font-size:18px;font-weight:600;letter-spacing:-.015em}
+  .t-body{font-size:14px;line-height:1.6}
+  .t-label{font-size:12px;font-weight:600;color:var(--ink-secondary)}
+  .t-meta{font-size:11px;color:var(--ink-tertiary)}
+  .num{font-size:26px;font-weight:600;letter-spacing:-.04em}
+</style></head>
+<body>
+  <p class="eyebrow">ConsultFlow · Foundations</p>
+  <h1>Typography</h1>
+  <p class="sub">Geist Sans carries product copy; Geist Mono carries every number — currency, times, scores — so operational data always reads as ledger-precise. Base working size is 14px.</p>
+  <div class="card">
+    <div class="row"><span class="tag">Display / 34</span><span class="h-display">Good morning, Sarah.</span></div>
+    <div class="row"><span class="tag">Title / 22</span><span class="h-title">Today&rsquo;s engagement rail</span></div>
+    <div class="row"><span class="tag">Headline / 18</span><span class="h-headline">Needs your judgment</span></div>
+    <div class="row"><span class="tag">Body / 14</span><span class="t-body">Turn the Q3 growth thesis into three executable bets.</span></div>
+    <div class="row"><span class="tag">Label / 12</span><span class="t-label">Revenue secured</span></div>
+    <div class="row"><span class="tag">Meta / 11</span><span class="t-meta">July 1&ndash;14 · cash basis</span></div>
+    <div class="row"><span class="tag">Metric / mono</span><span class="num mono">$18,950</span></div>
+  </div>
+</body></html>

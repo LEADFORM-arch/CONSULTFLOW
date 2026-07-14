@@ -1,0 +1,51 @@
+<!-- @dsCard group="Foundations" name="Color tokens" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConsultFlow · Color tokens</title>
+<style>
+  :root{
+    --canvas:#f3f1ec;--canvas-warm:#f7f5f0;--paper:#fbfaf7;--ink:#152033;
+    --ink-secondary:#526071;--ink-tertiary:#7d8794;--line:rgba(21,32,51,.12);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:44px;color:var(--ink);
+    font-family:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    background-color:var(--canvas);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),radial-gradient(135% 90% at 50% -12%,var(--canvas-warm),rgba(247,245,240,0) 55%);
+    -webkit-font-smoothing:antialiased;}
+  .eyebrow{font-family:"Geist Mono",ui-monospace,monospace;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--ink-tertiary);margin:0 0 8px}
+  h1{font-size:24px;font-weight:600;letter-spacing:-.03em;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--ink-secondary);margin:0 0 30px;max-width:62ch;line-height:1.5}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+  .swatch{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(21,32,51,.04),0 8px 20px -12px rgba(21,32,51,.14)}
+  .chip{height:74px}
+  .meta{padding:12px 14px}
+  .name{font-size:12.5px;font-weight:600;letter-spacing:-.01em}
+  .role{font-size:11px;color:var(--ink-secondary);margin-top:2px}
+  .hex{font-family:"Geist Mono",ui-monospace,monospace;font-size:11px;color:var(--ink-tertiary);margin-top:6px}
+  .section{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--ink-tertiary);margin:30px 0 12px}
+</style></head>
+<body>
+  <p class="eyebrow">ConsultFlow · Foundations</p>
+  <h1>Color</h1>
+  <p class="sub">A boardroom palette: deep ink for authority, warm paper for the client document, a single cobalt for decisions, and restrained semantic accents. Amber is detail, never decoration.</p>
+
+  <div class="section">Core</div>
+  <div class="grid">
+    <div class="swatch"><div class="chip" style="background:#101b2a"></div><div class="meta"><div class="name">Ink Navy</div><div class="role">Navigation · authority</div><div class="hex">#101B2A</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#152033"></div><div class="meta"><div class="name">Ink</div><div class="role">Primary text</div><div class="hex">#152033</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#fbfaf7;border-bottom:1px solid var(--line)"></div><div class="meta"><div class="name">Paper</div><div class="role">Raised surface</div><div class="hex">#FBFAF7</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#f3f1ec;border-bottom:1px solid var(--line)"></div><div class="meta"><div class="name">Canvas</div><div class="role">Warm workspace</div><div class="hex">#F3F1EC</div></div></div>
+  </div>
+
+  <div class="section">Decision &amp; revenue</div>
+  <div class="grid">
+    <div class="swatch"><div class="chip" style="background:#24529a"></div><div class="meta"><div class="name">Cobalt</div><div class="role">Primary action</div><div class="hex">#24529A</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#1d725b"></div><div class="meta"><div class="name">Ledger Green</div><div class="role">Secured revenue</div><div class="hex">#1D725B</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#a47635"></div><div class="meta"><div class="name">Muted Brass</div><div class="role">Premium detail</div><div class="hex">#A47635</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#ad642d"></div><div class="meta"><div class="name">Warning Umber</div><div class="role">Risk, without alarm</div><div class="hex">#AD642D</div></div></div>
+  </div>
+</body></html>
