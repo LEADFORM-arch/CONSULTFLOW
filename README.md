@@ -32,7 +32,7 @@ The initial product wedge is deliberately narrow enough for a solo founder: the 
 - White-label public booking flow with service, time, intake, and confirmation steps
 - Reduced-motion support, keyboard focus states, semantic landmarks, and accessible labels
 
-All product data is currently local demo data. No payment, calendar, messaging, or AI provider is connected yet.
+Dashboard data is currently demonstrative. Public booking requests are validated server-side and can be persisted to Supabase when the documented server variables are configured. No payment, calendar, messaging, or AI provider is connected yet.
 
 ## Technology
 
@@ -59,9 +59,23 @@ The public booking demonstration is available at [http://localhost:3000/sarah-st
 
 ```bash
 npm run lint
+npm test
 npx tsc --noEmit
 npm run build
 ```
+
+## Booking persistence
+
+The public booking form posts to `POST /api/booking-requests`. The endpoint:
+
+- validates every field with Zod;
+- resolves duration and price from the trusted server catalog;
+- accepts only explicitly published time slots;
+- requires explicit contact consent;
+- writes with a server-only Supabase key;
+- returns `503` rather than pretending to save when persistence is unavailable.
+
+Apply the migration in `supabase/migrations` to an isolated Supabase project, then configure the variables documented in `.env.example`. The service-role key must never be prefixed with `NEXT_PUBLIC_` or exposed to the browser.
 
 ## Product system
 

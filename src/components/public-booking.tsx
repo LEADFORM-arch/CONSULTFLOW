@@ -17,62 +17,19 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import {
+  bookingDays as days,
+  bookingServices as services,
+  bookingTimesByDay as timesByDay,
+  toEasternIso,
+  type BookingService as Service,
+} from "@/lib/booking-domain";
+import type {
+  BookingRequestError,
+  BookingRequestResponse,
+} from "@/lib/booking-schema";
 
 type Step = 1 | 2 | 3 | 4;
-
-type Service = {
-  id: string;
-  name: string;
-  descriptor: string;
-  duration: number;
-  price: number;
-  idealFor: string;
-  outcome: string;
-};
-
-const services: Service[] = [
-  {
-    id: "decision-session",
-    name: "Executive Decision Session",
-    descriptor: "A focused working session",
-    duration: 60,
-    price: 750,
-    idealFor: "One high-stakes decision that cannot drift",
-    outcome: "Decision memo + 3 accountable next steps",
-  },
-  {
-    id: "strategy-intensive",
-    name: "Strategy Intensive",
-    descriptor: "Pre-work, workshop, and decision brief",
-    duration: 90,
-    price: 1250,
-    idealFor: "Growth, positioning, or operating model questions",
-    outcome: "Prioritized thesis + 30-day action plan",
-  },
-  {
-    id: "advisory-fit",
-    name: "Advisory Fit Conversation",
-    descriptor: "A qualified path to ongoing advisory",
-    duration: 30,
-    price: 0,
-    idealFor: "Leaders considering a quarterly engagement",
-    outcome: "Mutual fit decision + recommended scope",
-  },
-];
-
-const days = [
-  { id: "2026-07-21", day: "Tue", date: "21", month: "Jul" },
-  { id: "2026-07-22", day: "Wed", date: "22", month: "Jul" },
-  { id: "2026-07-23", day: "Thu", date: "23", month: "Jul" },
-  { id: "2026-07-24", day: "Fri", date: "24", month: "Jul" },
-];
-
-const timesByDay: Record<string, string[]> = {
-  "2026-07-21": ["9:30 AM", "11:00 AM", "2:30 PM"],
-  "2026-07-22": ["10:00 AM", "1:00 PM", "3:30 PM"],
-  "2026-07-23": ["9:00 AM", "12:30 PM", "4:00 PM"],
-  "2026-07-24": ["10:30 AM", "1:30 PM"],
-};
 
 const stepLabels = ["Service", "Time", "Context", "Confirm"];
 
@@ -95,7 +52,10 @@ export function PublicBookingExperience() {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [challenge, setChallenge] = useState("");
+  const [consent, setConsent] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const service = useMemo(
     () => services.find((item) => item.id === serviceId) ?? services[1],
@@ -109,7 +69,7 @@ export function PublicBookingExperience() {
       : step === 2
         ? Boolean(day && time)
         : step === 3
-          ? Boolean(name.trim() && email.includes("@") && challenge.trim())
+          ? Boolean(name.trim() && email.includes("@") && challenge.trim().length >= 20 && consent)
           : true;
 
   const next = () => {
@@ -118,6 +78,49 @@ export function PublicBookingExperience() {
   };
 
   const back = () => setStep((current) => Math.max(1, current - 1) as Step);
+
+  const submitBooking = async () => {
+    const startAt = toEasternIso(day, time);
+    if (!startAt || submitting) return;
+
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/booking-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          consultantSlug: "sarah-strategy",
+          serviceId: service.id,
+          startAt,
+          timezone: "America/New_York",
+          client: {
+            name,
+            email,
+            company: company || undefined,
+          },
+          challenge,
+          consentToContact: consent,
+        }),
+      });
+
+      const result = (await response.json()) as
+        | BookingRequestResponse
+        | BookingRequestError;
+
+      if (!response.ok || !("bookingId" in result)) {
+        setSubmitError("error" in result ? result.error : "Booking is temporarily unavailable.");
+        return;
+      }
+
+      setConfirmed(true);
+    } catch {
+      setSubmitError("We could not reach the booking service. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (confirmed) {
     return (
@@ -128,13 +131,13 @@ export function PublicBookingExperience() {
               <CheckCircle2 size={23} />
             </div>
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
-              Time protected
+              Request received
             </p>
             <h1 className="mt-3 text-[28px] font-semibold tracking-[-0.04em] sm:text-[36px]">
-              You’re on Sarah’s calendar.
+              Your advisory request is in.
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-6 text-white/58">
-              Your preparation note is saved locally in this prototype. A production confirmation would be sent to {email || "your email"}.
+              Your requested time and preparation note are saved securely. Sarah can now review the context and confirm the engagement with {email || "your email"}.
             </p>
           </div>
           <div className="grid gap-6 p-6 sm:grid-cols-[1fr_210px] sm:p-10">
@@ -220,7 +223,7 @@ export function PublicBookingExperience() {
 
             {step === 1 && <ServiceStep serviceId={serviceId} select={setServiceId} />}
             {step === 2 && <TimeStep day={day} time={time} selectDay={(value) => { setDay(value); setTime(""); }} selectTime={setTime} />}
-            {step === 3 && <ContextStep name={name} email={email} company={company} challenge={challenge} setName={setName} setEmail={setEmail} setCompany={setCompany} setChallenge={setChallenge} />}
+            {step === 3 && <ContextStep name={name} email={email} company={company} challenge={challenge} consent={consent} setName={setName} setEmail={setEmail} setCompany={setCompany} setChallenge={setChallenge} setConsent={setConsent} />}
             {step === 4 && <ConfirmStep service={service} day={selectedDay} time={time} name={name} />}
 
             <div className="mt-8 flex items-center justify-between border-t border-[#152033]/8 pt-5">
@@ -228,9 +231,10 @@ export function PublicBookingExperience() {
               {step < 4 ? (
                 <button type="button" onClick={next} disabled={!canContinue} className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#24529a] px-4 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(18,41,75,0.24)] hover:bg-[#1d4788] disabled:cursor-not-allowed disabled:opacity-40">Continue <ArrowRight size={14} /></button>
               ) : (
-                <button type="button" onClick={() => setConfirmed(true)} className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#1d725b] px-4 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(18,75,57,0.24)] hover:bg-[#185d4b]">Confirm session <Check size={14} /></button>
+                <button type="button" onClick={submitBooking} disabled={submitting} className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#1d725b] px-4 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(18,75,57,0.24)] hover:bg-[#185d4b] disabled:cursor-wait disabled:opacity-60">{submitting ? "Saving request…" : "Request session"} {!submitting && <Check size={14} />}</button>
               )}
             </div>
+            {submitError && <p role="alert" className="mt-3 rounded-[8px] border border-[#ad642d]/18 bg-[#f7ece3] px-3 py-2.5 text-[10px] text-[#8f4f23]">{submitError}</p>}
           </section>
 
           <aside className="bg-[#f7f5f0] p-5 sm:p-7 lg:border-l lg:border-[#152033]/8">
@@ -247,7 +251,7 @@ export function PublicBookingExperience() {
             <div className="mt-6 rounded-[9px] border border-[#1d725b]/12 bg-[#e9f1ed] p-3.5"><div className="flex gap-2"><ShieldCheck size={14} className="mt-0.5 shrink-0 text-[#1d725b]" /><p className="text-[9px] leading-4 text-[#55756a]">100% refund up to 24 hours before the session. Your preparation notes remain private.</p></div></div>
           </aside>
         </div>
-        <div className="mt-4 flex flex-col gap-2 text-center text-[9px] text-[#9299a2] sm:flex-row sm:items-center sm:justify-between sm:text-left"><span>Prototype booking flow — no payment is processed.</span><span className="flex items-center justify-center gap-1.5"><LockKeyhole size={11} /> Powered privately by ConsultFlow</span></div>
+        <div className="mt-4 flex flex-col gap-2 text-center text-[9px] text-[#9299a2] sm:flex-row sm:items-center sm:justify-between sm:text-left"><span>Booking request only — no payment is processed yet.</span><span className="flex items-center justify-center gap-1.5"><LockKeyhole size={11} /> Powered privately by ConsultFlow</span></div>
       </main>
     </div>
   );
@@ -265,8 +269,8 @@ function TimeStep({ day, time, selectDay, selectTime }: { day: string; time: str
   return <div><Eyebrow>Protect the time</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">Choose a focused window.</h1><p className="mt-2 text-xs leading-5 text-[#6e7987]">Preparation and debrief time are already held around every session.</p><div className="mt-6 grid grid-cols-4 gap-2">{days.map((item) => <button key={item.id} type="button" onClick={() => selectDay(item.id)} aria-pressed={day === item.id} className={`rounded-[9px] border px-2 py-3 text-center ${day === item.id ? "border-[#24529a]/45 bg-[#e9eff7] text-[#20467e]" : "border-[#152033]/9 bg-white text-[#596677] hover:border-[#152033]/18"}`}><span className="block text-[9px] font-semibold uppercase tracking-[0.08em]">{item.day}</span><span className="mt-1 block font-mono text-base font-semibold">{item.date}</span><span className="mt-0.5 block text-[8px] opacity-65">{item.month}</span></button>)}</div><div className="mt-6 flex items-center justify-between"><p className="text-[10px] font-semibold text-[#4d5a6d]">Available times</p><p className="flex items-center gap-1.5 text-[9px] text-[#848d98]"><Globe2 size={11} /> Eastern Time · EDT</p></div><div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">{timesByDay[day].map((item) => <button type="button" key={item} onClick={() => selectTime(item)} aria-pressed={time === item} className={`h-11 rounded-[8px] border font-mono text-[10px] font-semibold ${time === item ? "border-[#24529a] bg-[#24529a] text-white" : "border-[#152033]/10 bg-white text-[#455367] hover:border-[#24529a]/35 hover:text-[#24529a]"}`}>{item}</button>)}</div></div>;
 }
 
-function ContextStep({ name, email, company, challenge, setName, setEmail, setCompany, setChallenge }: { name: string; email: string; company: string; challenge: string; setName: (value: string) => void; setEmail: (value: string) => void; setCompany: (value: string) => void; setChallenge: (value: string) => void }) {
-  return <div><Eyebrow>Prepare the room</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">What must be true when we finish?</h1><p className="mt-2 text-xs leading-5 text-[#6e7987]">A concise brief lets the session begin at the decision — not the backstory.</p><div className="mt-6 grid gap-4 sm:grid-cols-2"><BookingField label="Your name" value={name} setValue={setName} placeholder="Jordan Lee" type="text" /><BookingField label="Work email" value={email} setValue={setEmail} placeholder="jordan@company.com" type="email" /><BookingField label="Company" value={company} setValue={setCompany} placeholder="Company, Inc." type="text" optional /></div><label className="mt-4 block"><span className="mb-2 flex items-center justify-between text-[10px] font-semibold text-[#536073]"><span>The decision or challenge</span><span className="font-normal text-[#999fa8]">{challenge.length}/400</span></span><textarea value={challenge} onChange={(event) => setChallenge(event.target.value.slice(0, 400))} placeholder="Describe the decision, what is blocking it, and what a valuable outcome would look like." rows={5} className="w-full resize-none rounded-[8px] border border-[#152033]/11 bg-[#eeece7] px-3 py-3 text-xs leading-5 outline-none transition-colors placeholder:text-[#989fa8] focus:border-[#24529a]/55 focus:bg-white" /></label><div className="mt-4 flex gap-2 rounded-[8px] border border-[#152033]/8 bg-white p-3"><Sparkles size={14} className="mt-0.5 shrink-0 text-[#24529a]" /><p className="text-[9px] leading-4 text-[#697584]">Sarah reviews this personally. ConsultFlow would use it only to prepare the agenda and your decision brief.</p></div></div>;
+function ContextStep({ name, email, company, challenge, consent, setName, setEmail, setCompany, setChallenge, setConsent }: { name: string; email: string; company: string; challenge: string; consent: boolean; setName: (value: string) => void; setEmail: (value: string) => void; setCompany: (value: string) => void; setChallenge: (value: string) => void; setConsent: (value: boolean) => void }) {
+  return <div><Eyebrow>Prepare the room</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">What must be true when we finish?</h1><p className="mt-2 text-xs leading-5 text-[#6e7987]">A concise brief lets the session begin at the decision — not the backstory.</p><div className="mt-6 grid gap-4 sm:grid-cols-2"><BookingField label="Your name" value={name} setValue={setName} placeholder="Jordan Lee" type="text" /><BookingField label="Work email" value={email} setValue={setEmail} placeholder="jordan@company.com" type="email" /><BookingField label="Company" value={company} setValue={setCompany} placeholder="Company, Inc." type="text" optional /></div><label className="mt-4 block"><span className="mb-2 flex items-center justify-between text-[10px] font-semibold text-[#536073]"><span>The decision or challenge</span><span className="font-normal text-[#999fa8]">{challenge.length}/400</span></span><textarea value={challenge} onChange={(event) => setChallenge(event.target.value.slice(0, 400))} placeholder="Describe the decision, what is blocking it, and what a valuable outcome would look like." rows={5} className="w-full resize-none rounded-[8px] border border-[#152033]/11 bg-[#eeece7] px-3 py-3 text-xs leading-5 outline-none transition-colors placeholder:text-[#989fa8] focus:border-[#24529a]/55 focus:bg-white" /></label><label className="mt-4 flex cursor-pointer gap-3 rounded-[8px] border border-[#152033]/8 bg-white p-3"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-0.5 size-4 accent-[#24529a]" /><span className="text-[9px] leading-4 text-[#697584]">I agree that Sarah Bennett Advisory may use these details to review and respond to this booking request. No marketing subscription is created.</span></label><div className="mt-3 flex gap-2 rounded-[8px] border border-[#152033]/8 bg-white p-3"><Sparkles size={14} className="mt-0.5 shrink-0 text-[#24529a]" /><p className="text-[9px] leading-4 text-[#697584]">Sarah reviews this personally. ConsultFlow uses it only to prepare the agenda and decision brief.</p></div></div>;
 }
 
 function BookingField({ label, value, setValue, placeholder, type, optional }: { label: string; value: string; setValue: (value: string) => void; placeholder: string; type: "text" | "email"; optional?: boolean }) {
