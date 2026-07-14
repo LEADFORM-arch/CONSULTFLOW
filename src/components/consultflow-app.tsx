@@ -346,6 +346,9 @@ function Sidebar({ activeView, chooseView }: { activeView: ViewId; chooseView: (
           <button type="button" className="flex w-full items-center gap-3 rounded-[8px] px-3 py-2.5 text-left text-xs text-white/54 hover:bg-white/6 hover:text-white">
             <MessageSquareText size={15} /> Support
           </button>
+          <a href="/sarah-strategy" target="_blank" rel="noreferrer" className="flex w-full items-center gap-3 rounded-[8px] px-3 py-2.5 text-left text-xs text-white/54 hover:bg-white/6 hover:text-white">
+            <ArrowUpRight size={15} /> Public booking page
+          </a>
         </div>
         <div className="rounded-[10px] border border-white/8 bg-white/[0.035] p-3">
           <div className="mb-2.5 flex items-center justify-between"><span className="text-[10px] font-medium text-white/56">July capacity</span><span className="font-mono text-[10px] text-[#9db8dc]">68%</span></div>

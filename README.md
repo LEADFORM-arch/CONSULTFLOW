@@ -29,6 +29,7 @@ The initial product wedge is deliberately narrow enough for a solo founder: the 
 - Command search with `Ctrl/Cmd + K`
 - Interactive client brief, engagement creation flow, notifications, and action feedback
 - Responsive desktop and mobile navigation
+- White-label public booking flow with service, time, intake, and confirmation steps
 - Reduced-motion support, keyboard focus states, semantic landmarks, and accessible labels
 
 All product data is currently local demo data. No payment, calendar, messaging, or AI provider is connected yet.
@@ -51,6 +52,8 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+The public booking demonstration is available at [http://localhost:3000/sarah-strategy](http://localhost:3000/sarah-strategy).
 
 ## Quality checks
 
