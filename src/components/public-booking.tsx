@@ -17,48 +17,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { serviceCatalog, type ServiceCatalogItem } from "@/lib/service-catalog";
 
 type Step = 1 | 2 | 3 | 4;
-
-type Service = {
-  id: string;
-  name: string;
-  descriptor: string;
-  duration: number;
-  price: number;
-  idealFor: string;
-  outcome: string;
-};
-
-const services: Service[] = [
-  {
-    id: "decision-session",
-    name: "Executive Decision Session",
-    descriptor: "A focused working session",
-    duration: 60,
-    price: 750,
-    idealFor: "One high-stakes decision that cannot drift",
-    outcome: "Decision memo + 3 accountable next steps",
-  },
-  {
-    id: "strategy-intensive",
-    name: "Strategy Intensive",
-    descriptor: "Pre-work, workshop, and decision brief",
-    duration: 90,
-    price: 1250,
-    idealFor: "Growth, positioning, or operating model questions",
-    outcome: "Prioritized thesis + 30-day action plan",
-  },
-  {
-    id: "advisory-fit",
-    name: "Advisory Fit Conversation",
-    descriptor: "A qualified path to ongoing advisory",
-    duration: 30,
-    price: 0,
-    idealFor: "Leaders considering a quarterly engagement",
-    outcome: "Mutual fit decision + recommended scope",
-  },
-];
 
 const days = [
   { id: "2026-07-21", day: "Tue", date: "21", month: "Jul" },
@@ -98,7 +59,7 @@ export function PublicBookingExperience() {
   const [confirmed, setConfirmed] = useState(false);
 
   const service = useMemo(
-    () => services.find((item) => item.id === serviceId) ?? services[1],
+    () => serviceCatalog.find((item) => item.id === serviceId) ?? serviceCatalog[1],
     [serviceId],
   );
 
@@ -258,7 +219,7 @@ function TrustPoint({ icon: Icon, value, label }: { icon: typeof BriefcaseBusine
 }
 
 function ServiceStep({ serviceId, select }: { serviceId: string; select: (id: string) => void }) {
-  return <div><Eyebrow>Choose the right engagement</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">What decision are we moving forward?</h1><p className="mt-2 max-w-xl text-xs leading-5 text-[#6e7987]">Each format is scoped to produce an explicit outcome, not just another conversation.</p><div className="mt-6 space-y-3">{services.map((service) => { const selected = serviceId === service.id; return <button type="button" key={service.id} onClick={() => select(service.id)} aria-pressed={selected} className={`w-full rounded-[10px] border p-4 text-left transition-all sm:p-5 ${selected ? "border-[#24529a]/45 bg-[#edf2f8] shadow-[inset_3px_0_0_#24529a]" : "border-[#152033]/9 bg-white hover:border-[#152033]/18 hover:bg-[#faf9f6]"}`}><div className="flex items-start gap-3"><span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border ${selected ? "border-[#24529a] bg-[#24529a] text-white" : "border-[#152033]/18 text-transparent"}`}><Check size={11} /></span><div className="min-w-0 flex-1"><div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center"><h2 className="text-xs font-semibold text-[#26344a]">{service.name}</h2><span className="font-mono text-[11px] font-semibold text-[#26344a]">{money(service.price)}</span></div><p className="mt-1 text-[10px] text-[#7d8793]">{service.duration} minutes · {service.descriptor}</p><div className="mt-3 grid gap-2 text-[9px] leading-4 text-[#657181] sm:grid-cols-2"><p><span className="font-semibold text-[#435166]">Best for:</span> {service.idealFor}</p><p><span className="font-semibold text-[#435166]">You leave with:</span> {service.outcome}</p></div></div></div></button>; })}</div></div>;
+  return <div><Eyebrow>Choose the right engagement</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">What decision are we moving forward?</h1><p className="mt-2 max-w-xl text-xs leading-5 text-[#6e7987]">Each format is scoped to produce an explicit outcome, not just another conversation.</p><div className="mt-6 space-y-3">{serviceCatalog.map((service) => { const selected = serviceId === service.id; return <button type="button" key={service.id} onClick={() => select(service.id)} aria-pressed={selected} className={`w-full rounded-[10px] border p-4 text-left transition-all sm:p-5 ${selected ? "border-[#24529a]/45 bg-[#edf2f8] shadow-[inset_3px_0_0_#24529a]" : "border-[#152033]/9 bg-white hover:border-[#152033]/18 hover:bg-[#faf9f6]"}`}><div className="flex items-start gap-3"><span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border ${selected ? "border-[#24529a] bg-[#24529a] text-white" : "border-[#152033]/18 text-transparent"}`}><Check size={11} /></span><div className="min-w-0 flex-1"><div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center"><h2 className="text-xs font-semibold text-[#26344a]">{service.name}</h2><span className="font-mono text-[11px] font-semibold text-[#26344a]">{money(service.price)}</span></div><p className="mt-1 text-[10px] text-[#7d8793]">{service.duration} minutes · {service.descriptor}</p><div className="mt-3 grid gap-2 text-[9px] leading-4 text-[#657181] sm:grid-cols-2"><p><span className="font-semibold text-[#435166]">Best for:</span> {service.idealFor}</p><p><span className="font-semibold text-[#435166]">You leave with:</span> {service.outcome}</p></div></div></div></button>; })}</div></div>;
 }
 
 function TimeStep({ day, time, selectDay, selectTime }: { day: string; time: string; selectDay: (value: string) => void; selectTime: (value: string) => void }) {
@@ -273,7 +234,7 @@ function BookingField({ label, value, setValue, placeholder, type, optional }: {
   return <label><span className="mb-2 block text-[10px] font-semibold text-[#536073]">{label} {optional && <span className="font-normal text-[#9aa1aa]">· Optional</span>}</span><input type={type} value={value} onChange={(event) => setValue(event.target.value)} placeholder={placeholder} className="h-11 w-full rounded-[8px] border border-[#152033]/11 bg-[#eeece7] px-3 text-xs outline-none transition-colors placeholder:text-[#989fa8] focus:border-[#24529a]/55 focus:bg-white" /></label>;
 }
 
-function ConfirmStep({ service, day, time, name }: { service: Service; day: { day: string; date: string; month: string }; time: string; name: string }) {
+function ConfirmStep({ service, day, time, name }: { service: ServiceCatalogItem; day: { day: string; date: string; month: string }; time: string; name: string }) {
   return <div><Eyebrow>Review and protect</Eyebrow><h1 className="mt-2 text-[23px] font-semibold tracking-[-0.035em] sm:text-[28px]">Everything is clear before you commit.</h1><p className="mt-2 text-xs leading-5 text-[#6e7987]">No card details are collected in this prototype.</p><div className="mt-6 overflow-hidden rounded-[11px] border border-[#152033]/10 bg-white"><div className="border-b border-[#152033]/8 bg-[#101b2a] p-5 text-white"><p className="text-[9px] uppercase tracking-[0.12em] text-white/40">Prepared for {name || "you"}</p><h2 className="mt-2 text-base font-semibold">{service.name}</h2><p className="mt-1 text-[10px] text-white/45">{day.day}, {day.month} {day.date} · {time} EDT</p></div><div className="grid gap-4 p-5 sm:grid-cols-2"><div><p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a929d]">Outcome</p><p className="mt-2 text-[10px] leading-5 text-[#596678]">{service.outcome}</p></div><div><p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a929d]">Protection</p><p className="mt-2 text-[10px] leading-5 text-[#596678]">Full refund until 24 hours before the session.</p></div></div></div><div className="mt-4 flex items-center justify-between rounded-[9px] border border-[#1d725b]/12 bg-[#e9f1ed] p-4"><div className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#1d725b]" /><div><p className="text-[10px] font-semibold text-[#245a49]">Prototype checkout</p><p className="mt-0.5 text-[9px] text-[#658177]">No payment will be processed</p></div></div><p className="font-mono text-sm font-semibold text-[#245a49]">{money(service.price)}</p></div></div>;
 }
 

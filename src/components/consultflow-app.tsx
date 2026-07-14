@@ -14,10 +14,12 @@ import {
   CircleDollarSign,
   Clock3,
   Command,
+  Copy,
   CreditCard,
   FileText,
   Gauge,
   LayoutDashboard,
+  Layers3,
   Menu,
   MessageSquareText,
   Plus,
@@ -30,10 +32,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { serviceCatalog, type ServiceCatalogItem } from "@/lib/service-catalog";
 
 type ViewId =
   | "briefing"
   | "schedule"
+  | "services"
   | "engagements"
   | "clients"
   | "revenue"
@@ -50,6 +54,7 @@ type NavigationItem = {
 const navigation: NavigationItem[] = [
   { id: "briefing", label: "Briefing", icon: LayoutDashboard },
   { id: "schedule", label: "Schedule", icon: CalendarDays },
+  { id: "services", label: "Services", icon: Layers3 },
   { id: "engagements", label: "Engagements", icon: Briefcase },
   { id: "clients", label: "Clients", icon: Users },
   { id: "revenue", label: "Revenue", icon: CircleDollarSign },
@@ -100,6 +105,27 @@ const clients = [
   { name: "Priya Shah", company: "Helio Works", initials: "PS", ltv: "$5,500", last: "Jul 8", health: "Renewal", work: "Founder coaching" },
 ];
 
+type PracticeService = ServiceCatalogItem & {
+  status: "published" | "draft";
+  bookings: number;
+  revenue: number;
+  qualification: "Required" | "Light";
+  payment: "Upfront" | "Complimentary";
+  policy: string;
+};
+
+const initialPracticeServices: PracticeService[] = serviceCatalog.map(
+  (service, index): PracticeService => ({
+    ...service,
+    status: index === 2 ? "draft" : "published",
+    bookings: [18, 11, 6][index] ?? 0,
+    revenue: [13500, 13750, 0][index] ?? 0,
+    qualification: index === 2 ? "Light" : "Required",
+    payment: service.price === 0 ? "Complimentary" : "Upfront",
+    policy: service.price === 0 ? "Flexible" : "24h · 50% retained",
+  }),
+);
+
 const viewMeta: Record<ViewId, { eyebrow: string; title: string; description: string }> = {
   briefing: {
     eyebrow: "Tuesday · July 14",
@@ -110,6 +136,11 @@ const viewMeta: Record<ViewId, { eyebrow: string; title: string; description: st
     eyebrow: "Practice calendar",
     title: "Schedule",
     description: "Client time, preparation, and recovery — planned as one system.",
+  },
+  services: {
+    eyebrow: "Offer architecture",
+    title: "Services",
+    description: "Shape, protect, and publish the engagements clients can request.",
   },
   engagements: {
     eyebrow: "Client lifecycle",
@@ -298,13 +329,14 @@ export function ConsultFlowApp() {
             </div>
             <div className="reveal flex items-center gap-2">
               <Button onClick={() => notify("Weekly review queued for Friday at 4:30 PM.")}><FileText size={14} /> Weekly review</Button>
-              <Button variant="primary" onClick={() => setModal("new-engagement")}><Plus size={15} /> New engagement</Button>
+              {activeView !== "services" && <Button variant="primary" onClick={() => setModal("new-engagement")}><Plus size={15} /> New engagement</Button>}
             </div>
           </section>
 
           <div key={activeView} className="reveal-delay">
             {activeView === "briefing" && <BriefingView openBrief={() => setModal("client-brief")} notify={notify} />}
             {activeView === "schedule" && <ScheduleView openBrief={() => setModal("client-brief")} notify={notify} />}
+            {activeView === "services" && <ServicesView notify={notify} />}
             {activeView === "engagements" && <EngagementsView openBrief={() => setModal("client-brief")} notify={notify} />}
             {activeView === "clients" && <ClientsView openBrief={() => setModal("client-brief")} />}
             {activeView === "revenue" && <RevenueView notify={notify} />}
@@ -507,6 +539,155 @@ function WeekGrid({ openBrief }: { openBrief: () => void }) {
 
 function Capacity({ label, value, width, color }: { label: string; value: string; width: string; color: string }) {
   return <div><div className="mb-2 flex justify-between text-[10px]"><span className="text-[#687483]">{label}</span><span className="font-mono font-semibold text-[#334156]">{value}</span></div><div className="h-1.5 rounded-full bg-[#e7e4de]"><div className={cx("h-full rounded-full", color)} style={{ width }} /></div></div>;
+}
+
+function formatServicePrice(price: number) {
+  return price === 0
+    ? "Complimentary"
+    : new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(price);
+}
+
+function ServicesView({ notify }: { notify: (message: string) => void }) {
+  const [services, setServices] = useState<PracticeService[]>(initialPracticeServices);
+  const [selectedId, setSelectedId] = useState(initialPracticeServices[0].id);
+  const [filter, setFilter] = useState<"all" | "published" | "draft">("all");
+  const selected = services.find((service) => service.id === selectedId) ?? services[0];
+  const visible = services.filter((service) => filter === "all" || service.status === filter);
+  const published = services.filter((service) => service.status === "published");
+  const protectedRevenue = published.reduce((total, service) => total + service.revenue, 0);
+  const totalBookings = services.reduce((total, service) => total + service.bookings, 0);
+
+  function updateSelected<K extends keyof PracticeService>(key: K, value: PracticeService[K]) {
+    setServices((current) =>
+      current.map((service) =>
+        service.id === selectedId ? { ...service, [key]: value } : service,
+      ),
+    );
+  }
+
+  function createService() {
+    const id = `service-${Date.now()}`;
+    const service: PracticeService = {
+      id,
+      name: "Untitled advisory offer",
+      descriptor: "Define the engagement promise",
+      duration: 60,
+      price: 0,
+      idealFor: "The client situation this offer is built for",
+      outcome: "A specific, accountable client outcome",
+      status: "draft",
+      bookings: 0,
+      revenue: 0,
+      qualification: "Required",
+      payment: "Upfront",
+      policy: "24h · 50% retained",
+    };
+
+    setServices((current) => [...current, service]);
+    setSelectedId(id);
+    setFilter("all");
+    notify("Draft service created locally.");
+  }
+
+  function duplicateService() {
+    if (!selected) return;
+    const id = `${selected.id}-copy-${Date.now()}`;
+    setServices((current) => [
+      ...current,
+      { ...selected, id, name: `${selected.name} — Copy`, status: "draft", bookings: 0, revenue: 0 },
+    ]);
+    setSelectedId(id);
+    setFilter("all");
+    notify("A private draft copy is ready to refine.");
+  }
+
+  async function copyBookingLink() {
+    const bookingUrl = `${window.location.origin}/sarah-strategy`;
+    try {
+      await navigator.clipboard.writeText(bookingUrl);
+      notify("Public booking link copied.");
+    } catch {
+      notify(`Booking link: ${bookingUrl}`);
+    }
+  }
+
+  if (!selected) {
+    return (
+      <section className="rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] px-6 py-16 text-center">
+        <Layers3 size={24} className="mx-auto text-[#8d96a1]" />
+        <h2 className="mt-4 text-sm font-semibold">Build your first client offer</h2>
+        <p className="mx-auto mt-2 max-w-md text-[10px] leading-5 text-[#77818d]">Define the decision, commercial terms, and qualification gate before publishing.</p>
+        <Button variant="primary" onClick={createService} className="mt-5"><Plus size={14} /> New service</Button>
+      </section>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#101b2a] text-white">
+        <div className="grid divide-y divide-white/8 sm:grid-cols-[1.2fr_1fr_1fr_auto] sm:divide-x sm:divide-y-0">
+          <div className="p-5 sm:p-6">
+            <p className="font-mono text-[9px] uppercase tracking-[0.13em] text-white/36">Offer ledger</p>
+            <p className="mt-2 text-base font-semibold">{published.length} published · {services.length - published.length} private</p>
+            <p className="mt-1 text-[10px] text-white/42">One trusted catalog powers every booking surface.</p>
+          </div>
+          <div className="p-5 sm:p-6"><p className="text-[9px] text-white/38">Requests · last 90 days</p><p className="mt-2 font-mono text-xl font-semibold">{totalBookings}</p><p className="mt-1 text-[9px] text-[#8fc5b1]">68% qualified</p></div>
+          <div className="p-5 sm:p-6"><p className="text-[9px] text-white/38">Revenue represented</p><p className="mt-2 font-mono text-xl font-semibold">{formatServicePrice(protectedRevenue)}</p><p className="mt-1 text-[9px] text-[#8fc5b1]">Upfront terms applied</p></div>
+          <div className="flex items-center gap-2 p-5 sm:p-6"><Button onClick={copyBookingLink} className="!border-white/10 !bg-white/7 !text-white hover:!bg-white/12"><Copy size={13} /> Copy link</Button><Button variant="primary" onClick={createService}><Plus size={14} /> New</Button></div>
+        </div>
+      </section>
+
+      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.45fr)_360px]">
+        <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7]">
+          <div className="flex flex-col gap-4 border-b border-[#152033]/8 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div><h2 className="text-sm font-semibold">Client-facing offers</h2><p className="mt-1 text-[10px] text-[#7b8490]">Select an offer to inspect its commercial guardrails.</p></div>
+            <div className="flex rounded-[8px] bg-[#ebe9e4] p-1">{(["all", "published", "draft"] as const).map((item) => <button key={item} type="button" onClick={() => setFilter(item)} className={cx("rounded-[6px] px-3 py-1.5 text-[9px] font-semibold capitalize", filter === item ? "bg-white text-[#253248] shadow-sm" : "text-[#78828f]")}>{item}</button>)}</div>
+          </div>
+          <div className="hidden grid-cols-[minmax(0,1.5fr)_110px_145px_100px] border-b border-[#152033]/7 px-5 py-3 text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a929d] sm:grid"><span>Offer</span><span>Terms</span><span>Guardrails</span><span>Performance</span></div>
+          <div className="divide-y divide-[#152033]/7">
+            {visible.map((service) => (
+              <button key={service.id} type="button" onClick={() => setSelectedId(service.id)} className={cx("grid w-full gap-3 px-5 py-4 text-left transition-colors sm:grid-cols-[minmax(0,1.5fr)_110px_145px_100px] sm:items-center", selectedId === service.id ? "bg-[#edf2f8] shadow-[inset_3px_0_0_#24529a]" : "hover:bg-[#f2f0eb]") }>
+                <div className="min-w-0"><div className="flex items-center gap-2"><p className="truncate text-xs font-semibold">{service.name}</p><StatusBadge tone={service.status === "published" ? "green" : "neutral"}>{service.status === "published" ? "Live" : "Draft"}</StatusBadge></div><p className="mt-1 truncate text-[10px] text-[#78828f]">{service.descriptor}</p></div>
+                <div><p className="font-mono text-[10px] font-semibold">{formatServicePrice(service.price)}</p><p className="mt-1 font-mono text-[9px] text-[#858e99]">{service.duration} min</p></div>
+                <div><p className="text-[10px] font-semibold text-[#4c596b]">{service.payment}</p><p className="mt-1 text-[9px] text-[#858e99]">{service.qualification} intake</p></div>
+                <div><p className="font-mono text-[10px] font-semibold">{service.bookings} requests</p><p className="mt-1 font-mono text-[9px] text-[#1d725b]">{formatServicePrice(service.revenue)}</p></div>
+              </button>
+            ))}
+          </div>
+          {visible.length === 0 && <div className="px-5 py-14 text-center"><Layers3 size={21} className="mx-auto text-[#9ba2ab]" /><p className="mt-3 text-xs font-semibold">No {filter} offers</p><p className="mt-1 text-[10px] text-[#818a96]">Change the filter or create a new service.</p></div>}
+        </section>
+
+        <section className="overflow-hidden rounded-[12px] border border-[#152033]/10 bg-[#fbfaf7] xl:sticky xl:top-24">
+          <div className="flex items-start justify-between border-b border-[#152033]/8 px-5 py-4"><div><p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#8a929d]">Offer controls</p><h2 className="mt-1.5 text-sm font-semibold">Edit service</h2></div><button type="button" onClick={duplicateService} className="rounded-[7px] p-2 text-[#6f7a88] hover:bg-[#152033]/5 hover:text-[#24529a]" aria-label="Duplicate service"><Copy size={14} /></button></div>
+          <div className="space-y-4 p-5">
+            <ServiceField label="Service name" value={selected.name} onChange={(value) => updateSelected("name", value)} />
+            <ServiceField label="Short promise" value={selected.descriptor} onChange={(value) => updateSelected("descriptor", value)} />
+            <div className="grid grid-cols-2 gap-3"><ServiceField label="Duration · min" type="number" value={String(selected.duration)} onChange={(value) => updateSelected("duration", Math.max(15, Number(value) || 15))} /><ServiceField label="Price · USD" type="number" value={String(selected.price)} onChange={(value) => updateSelected("price", Math.max(0, Number(value) || 0))} /></div>
+            <ServiceField label="Best for" value={selected.idealFor} onChange={(value) => updateSelected("idealFor", value)} multiline />
+            <ServiceField label="Client outcome" value={selected.outcome} onChange={(value) => updateSelected("outcome", value)} multiline />
+            <div className="grid grid-cols-2 gap-3 border-t border-[#152033]/8 pt-4">
+              <button type="button" onClick={() => updateSelected("qualification", selected.qualification === "Required" ? "Light" : "Required")} className="rounded-[8px] border border-[#152033]/9 bg-white p-3 text-left hover:border-[#152033]/18"><p className="text-[9px] text-[#87909b]">Qualification</p><p className="mt-1.5 text-[10px] font-semibold">{selected.qualification}</p></button>
+              <button type="button" onClick={() => updateSelected("payment", selected.payment === "Upfront" ? "Complimentary" : "Upfront")} className="rounded-[8px] border border-[#152033]/9 bg-white p-3 text-left hover:border-[#152033]/18"><p className="text-[9px] text-[#87909b]">Payment</p><p className="mt-1.5 text-[10px] font-semibold">{selected.payment}</p></button>
+            </div>
+            <div className={cx("rounded-[9px] border p-4", selected.status === "published" ? "border-[#1d725b]/15 bg-[#eaf2ed]" : "border-[#a47635]/15 bg-[#f4ede3]") }><div className="flex items-start justify-between gap-3"><div><p className={cx("text-[10px] font-semibold", selected.status === "published" ? "text-[#174f40]" : "text-[#72552b]")}>{selected.status === "published" ? "Visible to clients" : "Private draft"}</p><p className="mt-1 text-[9px] leading-4 text-[#6d7886]">{selected.status === "published" ? "Included on Sarah’s booking page." : "Only you can review this offer."}</p></div><span className={cx("mt-1 size-2 rounded-full", selected.status === "published" ? "bg-[#1d725b]" : "bg-[#a47635]")} /></div></div>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#152033]/8 px-5 py-4">
+            <a href="/sarah-strategy" target="_blank" rel="noreferrer" className="inline-flex h-9 items-center gap-2 rounded-[8px] px-2 text-[10px] font-semibold text-[#5c6878] hover:bg-[#152033]/5 hover:text-[#24529a]">Preview <ArrowUpRight size={13} /></a>
+            <Button variant={selected.status === "published" ? "secondary" : "primary"} onClick={() => { const nextStatus = selected.status === "published" ? "draft" : "published"; updateSelected("status", nextStatus); notify(nextStatus === "published" ? "Service published in this local prototype." : "Service returned to a private draft."); }}>{selected.status === "published" ? "Unpublish" : "Publish service"}</Button>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function ServiceField({ label, value, onChange, type = "text", multiline = false }: { label: string; value: string; onChange: (value: string) => void; type?: "text" | "number"; multiline?: boolean }) {
+  const controlClass = "w-full rounded-[8px] border border-[#152033]/11 bg-[#eeece7] px-3 text-xs text-[#253248] outline-none transition-colors placeholder:text-[#9aa1aa] focus:border-[#24529a]/55 focus:bg-white";
+  return <label><span className="mb-2 block text-[10px] font-semibold text-[#536073]">{label}</span>{multiline ? <textarea rows={3} value={value} onChange={(event) => onChange(event.target.value)} className={cx(controlClass, "resize-none py-2.5 leading-5")} /> : <input type={type} min={type === "number" ? 0 : undefined} value={value} onChange={(event) => onChange(event.target.value)} className={cx(controlClass, "h-10")} />}</label>;
 }
 
 function EngagementsView({ openBrief, notify }: { openBrief: () => void; notify: (message: string) => void }) {
